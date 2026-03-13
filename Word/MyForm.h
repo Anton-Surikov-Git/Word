@@ -70,6 +70,8 @@ namespace Word {
 	private: System::Windows::Forms::ToolStripButton^ alignCenterButton;
 	private: System::Windows::Forms::ToolStripButton^ alignRightButton;
 	private: System::Windows::Forms::ToolStripComboBox^ fontSizeComboBox;
+	private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator2;
+	private: System::Windows::Forms::ToolStripButton^ insertImageButton;
 
 
 		System::ComponentModel::IContainer^ components;
@@ -98,7 +100,9 @@ namespace Word {
 			this->alignLeftButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->alignCenterButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->alignRightButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripSeparator2 = (gcnew System::Windows::Forms::ToolStripSeparator());
 			this->fontSizeComboBox = (gcnew System::Windows::Forms::ToolStripComboBox());
+			this->insertImageButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
@@ -154,11 +158,11 @@ namespace Word {
 			// 
 			// toolStrip1
 			// 
-			this->toolStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(16) {
+			this->toolStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(18) {
 				this->createToolStripMenuItem,
 					this->openToolStripButton, this->saveToolStripButton, this->toolStripSeparator, this->cutToolStripButton, this->copyToolStripButton,
 					this->pasteToolStripButton, this->boldButton, this->italicButton, this->underlineButton, this->colorButton, this->toolStripSeparator1,
-					this->alignLeftButton, this->alignCenterButton, this->alignRightButton, this->fontSizeComboBox
+					this->alignLeftButton, this->alignCenterButton, this->alignRightButton, this->toolStripSeparator2, this->fontSizeComboBox, this->insertImageButton
 			});
 			this->toolStrip1->Location = System::Drawing::Point(3, 3);
 			this->toolStrip1->Name = L"toolStrip1";
@@ -169,6 +173,7 @@ namespace Word {
 			// createToolStripMenuItem
 			// 
 			this->createToolStripMenuItem->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->createToolStripMenuItem->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"createToolStripMenuItem.Image")));
 			this->createToolStripMenuItem->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->createToolStripMenuItem->Name = L"createToolStripMenuItem";
 			this->createToolStripMenuItem->Size = System::Drawing::Size(23, 22);
@@ -178,6 +183,7 @@ namespace Word {
 			// openToolStripButton
 			// 
 			this->openToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->openToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"openToolStripButton.Image")));
 			this->openToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->openToolStripButton->Name = L"openToolStripButton";
 			this->openToolStripButton->Size = System::Drawing::Size(23, 22);
@@ -187,6 +193,7 @@ namespace Word {
 			// saveToolStripButton
 			// 
 			this->saveToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->saveToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"saveToolStripButton.Image")));
 			this->saveToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->saveToolStripButton->Name = L"saveToolStripButton";
 			this->saveToolStripButton->Size = System::Drawing::Size(23, 22);
@@ -201,6 +208,7 @@ namespace Word {
 			// cutToolStripButton
 			// 
 			this->cutToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->cutToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"cutToolStripButton.Image")));
 			this->cutToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->cutToolStripButton->Name = L"cutToolStripButton";
 			this->cutToolStripButton->Size = System::Drawing::Size(23, 22);
@@ -210,6 +218,7 @@ namespace Word {
 			// copyToolStripButton
 			// 
 			this->copyToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->copyToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"copyToolStripButton.Image")));
 			this->copyToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->copyToolStripButton->Name = L"copyToolStripButton";
 			this->copyToolStripButton->Size = System::Drawing::Size(23, 22);
@@ -219,6 +228,7 @@ namespace Word {
 			// pasteToolStripButton
 			// 
 			this->pasteToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->pasteToolStripButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pasteToolStripButton.Image")));
 			this->pasteToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->pasteToolStripButton->Name = L"pasteToolStripButton";
 			this->pasteToolStripButton->Size = System::Drawing::Size(23, 22);
@@ -299,6 +309,11 @@ namespace Word {
 			this->alignRightButton->Text = L"Выровнять по правому краю";
 			this->alignRightButton->Click += gcnew System::EventHandler(this, &MyForm::alignRightButton_Click);
 			// 
+			// toolStripSeparator2
+			// 
+			this->toolStripSeparator2->Name = L"toolStripSeparator2";
+			this->toolStripSeparator2->Size = System::Drawing::Size(6, 25);
+			// 
 			// fontSizeComboBox
 			// 
 			this->fontSizeComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(16) {
@@ -307,9 +322,19 @@ namespace Word {
 			});
 			this->fontSizeComboBox->Name = L"fontSizeComboBox";
 			this->fontSizeComboBox->Size = System::Drawing::Size(75, 25);
-			this->fontSizeComboBox->Text = L"12";
+			this->fontSizeComboBox->Text = L"Шрифт";
 			this->fontSizeComboBox->ToolTipText = L"Размер шрифта";
 			this->fontSizeComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::fontSizeComboBox_SelectedIndexChanged);
+			// 
+			// insertImageButton
+			// 
+			this->insertImageButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->insertImageButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"insertImageButton.Image")));
+			this->insertImageButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->insertImageButton->Name = L"insertImageButton";
+			this->insertImageButton->Size = System::Drawing::Size(23, 22);
+			this->insertImageButton->Text = L"Фото";
+			this->insertImageButton->Click += gcnew System::EventHandler(this, &MyForm::insertImageButton_Click);
 			// 
 			// statusStrip1
 			// 
@@ -616,6 +641,40 @@ private: System::Void fontSizeComboBox_SelectedIndexChanged(System::Object^ send
 		System::Drawing::Font^ currentFont = richTextBox1->SelectionFont;
 		if (currentFont == nullptr) currentFont = richTextBox1->Font;
 		richTextBox1->SelectionFont = gcnew System::Drawing::Font(currentFont->FontFamily, newSize, currentFont->Style);
+	}
+}
+private: System::Void insertImageButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
+	openFileDialog->Filter = "Изображения|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff|Все файлы|*.*";
+	openFileDialog->Title = "Выберите изображение для вставки";
+	openFileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::MyPictures);
+
+	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		try {
+			// Сохраняем текущее содержимое буфера обмена (исправленная строка)
+			System::Windows::Forms::IDataObject^ savedClipboard = Clipboard::GetDataObject();
+
+			// Загружаем изображение из выбранного файла
+			System::Drawing::Image^ image = System::Drawing::Image::FromFile(openFileDialog->FileName);
+
+			// Копируем изображение в буфер обмена
+			Clipboard::SetImage(image);
+
+			// Вставляем изображение
+			richTextBox1->Paste();
+
+			toolStripStatusLabel1->Text = "Изображение вставлено: " + System::IO::Path::GetFileName(openFileDialog->FileName);
+
+			// Восстанавливаем сохраненное содержимое буфера обмена
+			if (savedClipboard != nullptr) {
+				Clipboard::SetDataObject(savedClipboard);
+			}
+
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Ошибка при вставке изображения: " + ex->Message, "Ошибка",
+				MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
 	}
 }
 };
