@@ -286,14 +286,7 @@ namespace Word {
 			this->ClientSize = System::Drawing::Size(1514, 737);
 			this->Controls->Add(this->tabControl1);
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
-			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-
-			this->tabControl1->ResumeLayout(false);
-			this->tabPage2->ResumeLayout(false);
-			this->tabPage2->PerformLayout();
-			this->toolStrip1->ResumeLayout(false);
-			this->toolStrip1->PerformLayout();
+			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load_1);
 			this->ResumeLayout(false);
 		}
 
@@ -528,5 +521,7 @@ namespace Word {
 			UpdateStatusBar(sender, e);
 		}
 	}
-	};
+	private: System::Void MyForm_Load_1(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
