@@ -584,13 +584,37 @@ namespace Word {
 	}
 
 	private: System::Void italicButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		System::Drawing::Font^ currentFont = richTextBox1->SelectionFont;
-		if (currentFont == nullptr) currentFont = richTextBox1->Font;
+		int selectionStart = richTextBox1->SelectionStart;
+		int selectionLength = richTextBox1->SelectionLength;
 
-		if (currentFont->Italic)
-			richTextBox1->SelectionFont = gcnew System::Drawing::Font(currentFont, currentFont->Style & ~System::Drawing::FontStyle::Italic);
-		else
-			richTextBox1->SelectionFont = gcnew System::Drawing::Font(currentFont, currentFont->Style | System::Drawing::FontStyle::Italic);
+		if (selectionLength > 0) {
+			System::Drawing::Font^ currentFont = richTextBox1->SelectionFont;
+			if (currentFont == nullptr) currentFont = richTextBox1->Font;
+
+			float currentSize = currentFont->Size;
+			System::Drawing::FontFamily^ currentFamily = currentFont->FontFamily;
+
+			if (currentFont->Italic)
+				richTextBox1->SelectionFont = gcnew System::Drawing::Font(currentFamily, currentSize,
+					currentFont->Style & ~System::Drawing::FontStyle::Italic);
+			else
+				richTextBox1->SelectionFont = gcnew System::Drawing::Font(currentFamily, currentSize,
+					currentFont->Style | System::Drawing::FontStyle::Italic);
+		}
+		else {
+			System::Drawing::Font^ currentFont = richTextBox1->Font;
+			float currentSize = currentFont->Size;
+			System::Drawing::FontFamily^ currentFamily = currentFont->FontFamily;
+
+			if (currentFont->Italic)
+				richTextBox1->Font = gcnew System::Drawing::Font(currentFamily, currentSize,
+					currentFont->Style & ~System::Drawing::FontStyle::Italic);
+			else
+				richTextBox1->Font = gcnew System::Drawing::Font(currentFamily, currentSize,
+					currentFont->Style | System::Drawing::FontStyle::Italic);
+		}
+
+		richTextBox1->Focus();
 	}
 
 	private: System::Void underlineButton_Click(System::Object^ sender, System::EventArgs^ e) {
