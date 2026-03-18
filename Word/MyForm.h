@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace Word {
 
@@ -23,7 +23,7 @@ namespace Word {
 
 			isModified = false;
 			currentFileName = nullptr;
-			this->Text = "��� Word";
+			this->Text = "Мой Word";
 
 			this->pasteToolStripButton->Click += gcnew System::EventHandler(this, &MyForm::pasteToolStripButton_Click);
 		}
@@ -55,7 +55,7 @@ namespace Word {
 		System::Windows::Forms::ToolStripButton^ pasteToolStripButton;
 		System::Windows::Forms::StatusStrip^ statusStrip2;
 
-		// ����������� ��������
+		// Добавленные элементы
 		System::Windows::Forms::ToolStripButton^ boldButton;
 		System::Windows::Forms::ToolStripButton^ italicButton;
 		System::Windows::Forms::ToolStripButton^ underlineButton;
@@ -94,6 +94,26 @@ namespace Word {
 	private: System::Windows::Forms::Button^ DOTbutton;
 	private: System::Windows::Forms::TextBox^ txtOutput;
 	private: System::Windows::Forms::Button^ ZERO;
+	private: System::Windows::Forms::GroupBox^ grpEmployeeInfo;
+	private: System::Windows::Forms::NumericUpDown^ numAge;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::GroupBox^ groupBox1;
+	private: System::Windows::Forms::Label^ lblQuestion1;
+	private: System::Windows::Forms::NumericUpDown^ numExperience;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::ComboBox^ cmbAnswer1;
+	private: System::Windows::Forms::GroupBox^ grpQuestion2;
+
+	private: System::Windows::Forms::ComboBox^ comboBox1;
+	private: System::Windows::Forms::ComboBox^ cmbAnswer2;
+
+	private: System::Windows::Forms::Label^ lblQuestion2;
+	private: System::Windows::Forms::Label^ lblResult;
+
+	private: System::Windows::Forms::Button^ btnCheckAnswers;
+	private: System::Windows::Forms::Button^ btnUpdateQuestions;
+
+
 
 
 		System::ComponentModel::IContainer^ components;
@@ -151,10 +171,31 @@ namespace Word {
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
 			this->tabPage4 = (gcnew System::Windows::Forms::TabPage());
+			this->grpQuestion2 = (gcnew System::Windows::Forms::GroupBox());
+			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			this->cmbAnswer2 = (gcnew System::Windows::Forms::ComboBox());
+			this->lblQuestion2 = (gcnew System::Windows::Forms::Label());
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->cmbAnswer1 = (gcnew System::Windows::Forms::ComboBox());
+			this->lblQuestion1 = (gcnew System::Windows::Forms::Label());
+			this->grpEmployeeInfo = (gcnew System::Windows::Forms::GroupBox());
+			this->numExperience = (gcnew System::Windows::Forms::NumericUpDown());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->numAge = (gcnew System::Windows::Forms::NumericUpDown());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->btnUpdateQuestions = (gcnew System::Windows::Forms::Button());
+			this->btnCheckAnswers = (gcnew System::Windows::Forms::Button());
+			this->lblResult = (gcnew System::Windows::Forms::Label());
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
 			this->tabPage2->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
+			this->tabPage4->SuspendLayout();
+			this->grpQuestion2->SuspendLayout();
+			this->groupBox1->SuspendLayout();
+			this->grpEmployeeInfo->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numExperience))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numAge))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// tabControl1
@@ -171,6 +212,7 @@ namespace Word {
 			// 
 			// tabPage1
 			// 
+			this->tabPage1->BackColor = System::Drawing::Color::Black;
 			this->tabPage1->Controls->Add(this->label1);
 			this->tabPage1->Controls->Add(this->DIVIDEbutton);
 			this->tabPage1->Controls->Add(this->DELbutton);
@@ -196,8 +238,7 @@ namespace Word {
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
 			this->tabPage1->Size = System::Drawing::Size(997, 686);
 			this->tabPage1->TabIndex = 0;
-			this->tabPage1->Text = L"�����������";
-			this->tabPage1->UseVisualStyleBackColor = true;
+			this->tabPage1->Text = L"Калькулятор";
 			// 
 			// label1
 			// 
@@ -210,7 +251,7 @@ namespace Word {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(118, 21);
 			this->label1->TabIndex = 44;
-			this->label1->Text = L"�����������";
+			this->label1->Text = L"КАЛЬКУЛЯТОР";
 			this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click);
 			// 
 			// DIVIDEbutton
@@ -595,7 +636,7 @@ namespace Word {
 			this->createToolStripMenuItem->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->createToolStripMenuItem->Name = L"createToolStripMenuItem";
 			this->createToolStripMenuItem->Size = System::Drawing::Size(23, 22);
-			this->createToolStripMenuItem->Text = L"&�������";
+			this->createToolStripMenuItem->Text = L"&Создать";
 			this->createToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::createToolStripMenuItem_Click);
 			// 
 			// openToolStripButton
@@ -605,7 +646,7 @@ namespace Word {
 			this->openToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->openToolStripButton->Name = L"openToolStripButton";
 			this->openToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->openToolStripButton->Text = L"&�������";
+			this->openToolStripButton->Text = L"&Открыть";
 			this->openToolStripButton->Click += gcnew System::EventHandler(this, &MyForm::openToolStripButton_Click);
 			// 
 			// saveToolStripButton
@@ -615,7 +656,7 @@ namespace Word {
 			this->saveToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->saveToolStripButton->Name = L"saveToolStripButton";
 			this->saveToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->saveToolStripButton->Text = L"&���������";
+			this->saveToolStripButton->Text = L"&Сохранить";
 			this->saveToolStripButton->Click += gcnew System::EventHandler(this, &MyForm::saveToolStripButton_Click);
 			// 
 			// toolStripSeparator
@@ -630,7 +671,7 @@ namespace Word {
 			this->cutToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->cutToolStripButton->Name = L"cutToolStripButton";
 			this->cutToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->cutToolStripButton->Text = L"�&�������";
+			this->cutToolStripButton->Text = L"В&ырезать";
 			this->cutToolStripButton->Click += gcnew System::EventHandler(this, &MyForm::cutToolStripButton_Click);
 			// 
 			// copyToolStripButton
@@ -640,7 +681,7 @@ namespace Word {
 			this->copyToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->copyToolStripButton->Name = L"copyToolStripButton";
 			this->copyToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->copyToolStripButton->Text = L"&����������";
+			this->copyToolStripButton->Text = L"&Копировать";
 			this->copyToolStripButton->Click += gcnew System::EventHandler(this, &MyForm::copyToolStripButton_Click);
 			// 
 			// pasteToolStripButton
@@ -650,7 +691,7 @@ namespace Word {
 			this->pasteToolStripButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->pasteToolStripButton->Name = L"pasteToolStripButton";
 			this->pasteToolStripButton->Size = System::Drawing::Size(23, 22);
-			this->pasteToolStripButton->Text = L"���&����";
+			this->pasteToolStripButton->Text = L"Вст&авка";
 			// 
 			// boldButton
 			// 
@@ -659,7 +700,7 @@ namespace Word {
 			this->boldButton->Name = L"boldButton";
 			this->boldButton->Size = System::Drawing::Size(23, 22);
 			this->boldButton->Text = L"B";
-			this->boldButton->ToolTipText = L"������";
+			this->boldButton->ToolTipText = L"Жирный";
 			this->boldButton->Click += gcnew System::EventHandler(this, &MyForm::boldButton_Click);
 			// 
 			// italicButton
@@ -669,7 +710,7 @@ namespace Word {
 			this->italicButton->Name = L"italicButton";
 			this->italicButton->Size = System::Drawing::Size(23, 22);
 			this->italicButton->Text = L"I";
-			this->italicButton->ToolTipText = L"������";
+			this->italicButton->ToolTipText = L"Курсив";
 			this->italicButton->Click += gcnew System::EventHandler(this, &MyForm::italicButton_Click);
 			// 
 			// underlineButton
@@ -679,7 +720,7 @@ namespace Word {
 			this->underlineButton->Name = L"underlineButton";
 			this->underlineButton->Size = System::Drawing::Size(23, 22);
 			this->underlineButton->Text = L"U";
-			this->underlineButton->ToolTipText = L"������������";
+			this->underlineButton->ToolTipText = L"Подчёркнутый";
 			this->underlineButton->Click += gcnew System::EventHandler(this, &MyForm::underlineButton_Click);
 			// 
 			// colorButton
@@ -689,7 +730,7 @@ namespace Word {
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(23, 22);
 			this->colorButton->Text = L"A";
-			this->colorButton->ToolTipText = L"���� ������";
+			this->colorButton->ToolTipText = L"Цвет текста";
 			this->colorButton->Click += gcnew System::EventHandler(this, &MyForm::colorButton_Click);
 			// 
 			// toolStripSeparator1
@@ -704,7 +745,7 @@ namespace Word {
 			this->alignLeftButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->alignLeftButton->Name = L"alignLeftButton";
 			this->alignLeftButton->Size = System::Drawing::Size(23, 22);
-			this->alignLeftButton->Text = L"��������� �� ������ ����";
+			this->alignLeftButton->Text = L"Выровнять по левому краю";
 			this->alignLeftButton->Click += gcnew System::EventHandler(this, &MyForm::alignLeftButton_Click);
 			// 
 			// alignCenterButton
@@ -714,7 +755,7 @@ namespace Word {
 			this->alignCenterButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->alignCenterButton->Name = L"alignCenterButton";
 			this->alignCenterButton->Size = System::Drawing::Size(23, 22);
-			this->alignCenterButton->Text = L"��������� �� ������";
+			this->alignCenterButton->Text = L"Выровнять по центру";
 			this->alignCenterButton->Click += gcnew System::EventHandler(this, &MyForm::alignCenterButton_Click);
 			// 
 			// alignRightButton
@@ -724,7 +765,7 @@ namespace Word {
 			this->alignRightButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->alignRightButton->Name = L"alignRightButton";
 			this->alignRightButton->Size = System::Drawing::Size(23, 22);
-			this->alignRightButton->Text = L"��������� �� ������� ����";
+			this->alignRightButton->Text = L"Выровнять по правому краю";
 			this->alignRightButton->Click += gcnew System::EventHandler(this, &MyForm::alignRightButton_Click);
 			// 
 			// toolStripSeparator2
@@ -740,8 +781,8 @@ namespace Word {
 			});
 			this->fontSizeComboBox->Name = L"fontSizeComboBox";
 			this->fontSizeComboBox->Size = System::Drawing::Size(75, 25);
-			this->fontSizeComboBox->Text = L"�����";
-			this->fontSizeComboBox->ToolTipText = L"������ ������";
+			this->fontSizeComboBox->Text = L"Шрифт";
+			this->fontSizeComboBox->ToolTipText = L"Размер шрифта";
 			this->fontSizeComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::fontSizeComboBox_SelectedIndexChanged);
 			// 
 			// insertImageButton
@@ -751,7 +792,7 @@ namespace Word {
 			this->insertImageButton->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->insertImageButton->Name = L"insertImageButton";
 			this->insertImageButton->Size = System::Drawing::Size(23, 22);
-			this->insertImageButton->Text = L"����";
+			this->insertImageButton->Text = L"Фото";
 			this->insertImageButton->Click += gcnew System::EventHandler(this, &MyForm::insertImageButton_Click);
 			// 
 			// statusStrip1
@@ -783,13 +824,177 @@ namespace Word {
 			// 
 			// tabPage4
 			// 
+			this->tabPage4->Controls->Add(this->lblResult);
+			this->tabPage4->Controls->Add(this->btnCheckAnswers);
+			this->tabPage4->Controls->Add(this->btnUpdateQuestions);
+			this->tabPage4->Controls->Add(this->grpQuestion2);
+			this->tabPage4->Controls->Add(this->groupBox1);
+			this->tabPage4->Controls->Add(this->grpEmployeeInfo);
 			this->tabPage4->Location = System::Drawing::Point(4, 22);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
 			this->tabPage4->Size = System::Drawing::Size(997, 686);
 			this->tabPage4->TabIndex = 3;
-			this->tabPage4->Text = L"�����";
+			this->tabPage4->Text = L"Опрос";
 			this->tabPage4->UseVisualStyleBackColor = true;
+			// 
+			// grpQuestion2
+			// 
+			this->grpQuestion2->Controls->Add(this->comboBox1);
+			this->grpQuestion2->Controls->Add(this->cmbAnswer2);
+			this->grpQuestion2->Controls->Add(this->lblQuestion2);
+			this->grpQuestion2->Location = System::Drawing::Point(15, 260);
+			this->grpQuestion2->Name = L"grpQuestion2";
+			this->grpQuestion2->Size = System::Drawing::Size(400, 100);
+			this->grpQuestion2->TabIndex = 2;
+			this->grpQuestion2->TabStop = false;
+			this->grpQuestion2->Text = L"Вопрос 2";
+			this->grpQuestion2->Enter += gcnew System::EventHandler(this, &MyForm::grpQuestion2_Enter);
+			// 
+			// comboBox1
+			// 
+			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->comboBox1->FormattingEnabled = true;
+			this->comboBox1->Location = System::Drawing::Point(15, 260);
+			this->comboBox1->Name = L"comboBox1";
+			this->comboBox1->Size = System::Drawing::Size(400, 21);
+			this->comboBox1->TabIndex = 2;
+			// 
+			// cmbAnswer2
+			// 
+			this->cmbAnswer2->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->cmbAnswer2->FormattingEnabled = true;
+			this->cmbAnswer2->Location = System::Drawing::Point(10, 50);
+			this->cmbAnswer2->Name = L"cmbAnswer2";
+			this->cmbAnswer2->Size = System::Drawing::Size(360, 21);
+			this->cmbAnswer2->TabIndex = 1;
+			this->cmbAnswer2->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::cmbAnswer2_SelectedIndexChanged);
+			// 
+			// lblQuestion2
+			// 
+			this->lblQuestion2->Location = System::Drawing::Point(10, 25);
+			this->lblQuestion2->Name = L"lblQuestion2";
+			this->lblQuestion2->Size = System::Drawing::Size(380, 20);
+			this->lblQuestion2->TabIndex = 0;
+			this->lblQuestion2->Text = L"(будет выбран на основе стажа)";
+			this->lblQuestion2->Click += gcnew System::EventHandler(this, &MyForm::lblQuestion2_Click);
+			// 
+			// groupBox1
+			// 
+			this->groupBox1->Controls->Add(this->cmbAnswer1);
+			this->groupBox1->Controls->Add(this->lblQuestion1);
+			this->groupBox1->Location = System::Drawing::Point(15, 150);
+			this->groupBox1->Name = L"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(400, 100);
+			this->groupBox1->TabIndex = 1;
+			this->groupBox1->TabStop = false;
+			this->groupBox1->Text = L"Вопрос 1";
+			this->groupBox1->Enter += gcnew System::EventHandler(this, &MyForm::groupBox1_Enter);
+			// 
+			// cmbAnswer1
+			// 
+			this->cmbAnswer1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->cmbAnswer1->FormattingEnabled = true;
+			this->cmbAnswer1->Location = System::Drawing::Point(10, 50);
+			this->cmbAnswer1->Name = L"cmbAnswer1";
+			this->cmbAnswer1->Size = System::Drawing::Size(360, 21);
+			this->cmbAnswer1->TabIndex = 1;
+			this->cmbAnswer1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::cmbAnswer1_SelectedIndexChanged);
+			// 
+			// lblQuestion1
+			// 
+			this->lblQuestion1->Location = System::Drawing::Point(10, 25);
+			this->lblQuestion1->Name = L"lblQuestion1";
+			this->lblQuestion1->Size = System::Drawing::Size(380, 20);
+			this->lblQuestion1->TabIndex = 0;
+			this->lblQuestion1->Text = L"(будет выбран на основе возраста)\r\n";
+			this->lblQuestion1->Click += gcnew System::EventHandler(this, &MyForm::lblQuestion1_Click);
+			// 
+			// grpEmployeeInfo
+			// 
+			this->grpEmployeeInfo->Controls->Add(this->numExperience);
+			this->grpEmployeeInfo->Controls->Add(this->label3);
+			this->grpEmployeeInfo->Controls->Add(this->numAge);
+			this->grpEmployeeInfo->Controls->Add(this->label2);
+			this->grpEmployeeInfo->Location = System::Drawing::Point(15, 15);
+			this->grpEmployeeInfo->Name = L"grpEmployeeInfo";
+			this->grpEmployeeInfo->Size = System::Drawing::Size(400, 120);
+			this->grpEmployeeInfo->TabIndex = 0;
+			this->grpEmployeeInfo->TabStop = false;
+			this->grpEmployeeInfo->Text = L"Информация о сотруднике";
+			this->grpEmployeeInfo->Enter += gcnew System::EventHandler(this, &MyForm::grpEmployeeInfo_Enter);
+			// 
+			// numExperience
+			// 
+			this->numExperience->Location = System::Drawing::Point(120, 57);
+			this->numExperience->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 50, 0, 0, 0 });
+			this->numExperience->Name = L"numExperience";
+			this->numExperience->Size = System::Drawing::Size(120, 20);
+			this->numExperience->TabIndex = 3;
+			this->numExperience->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 5, 0, 0, 0 });
+			this->numExperience->ValueChanged += gcnew System::EventHandler(this, &MyForm::numExperience_ValueChanged);
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(10, 60);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(99, 13);
+			this->label3->TabIndex = 2;
+			this->label3->Text = L"Стаж работы (лет)";
+			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
+			// 
+			// numAge
+			// 
+			this->numAge->Location = System::Drawing::Point(80, 27);
+			this->numAge->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 18, 0, 0, 0 });
+			this->numAge->Name = L"numAge";
+			this->numAge->Size = System::Drawing::Size(120, 20);
+			this->numAge->TabIndex = 1;
+			this->numAge->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 30, 0, 0, 0 });
+			this->numAge->ValueChanged += gcnew System::EventHandler(this, &MyForm::numAge_ValueChanged);
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(10, 30);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(52, 13);
+			this->label2->TabIndex = 0;
+			this->label2->Text = L"Возраст:";
+			this->label2->Click += gcnew System::EventHandler(this, &MyForm::label2_Click);
+			// 
+			// btnUpdateQuestions
+			// 
+			this->btnUpdateQuestions->Location = System::Drawing::Point(430, 50);
+			this->btnUpdateQuestions->Name = L"btnUpdateQuestions";
+			this->btnUpdateQuestions->Size = System::Drawing::Size(120, 30);
+			this->btnUpdateQuestions->TabIndex = 3;
+			this->btnUpdateQuestions->Text = L"Обновить вопросы";
+			this->btnUpdateQuestions->UseVisualStyleBackColor = true;
+			this->btnUpdateQuestions->Click += gcnew System::EventHandler(this, &MyForm::btnUpdateQuestions_Click);
+			// 
+			// btnCheckAnswers
+			// 
+			this->btnCheckAnswers->Location = System::Drawing::Point(430, 100);
+			this->btnCheckAnswers->Name = L"btnCheckAnswers";
+			this->btnCheckAnswers->Size = System::Drawing::Size(120, 30);
+			this->btnCheckAnswers->TabIndex = 4;
+			this->btnCheckAnswers->Text = L"Проверить ответы";
+			this->btnCheckAnswers->UseVisualStyleBackColor = true;
+			this->btnCheckAnswers->Click += gcnew System::EventHandler(this, &MyForm::btnCheckAnswers_Click);
+			// 
+			// lblResult
+			// 
+			this->lblResult->AutoSize = true;
+			this->lblResult->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->lblResult->Location = System::Drawing::Point(15, 370);
+			this->lblResult->Name = L"lblResult";
+			this->lblResult->Size = System::Drawing::Size(18, 17);
+			this->lblResult->TabIndex = 5;
+			this->lblResult->Text = L"\"\"";
+			this->lblResult->Click += gcnew System::EventHandler(this, &MyForm::lblResult_Click);
 			// 
 			// MyForm
 			// 
@@ -806,6 +1011,14 @@ namespace Word {
 			this->tabPage2->PerformLayout();
 			this->toolStrip1->ResumeLayout(false);
 			this->toolStrip1->PerformLayout();
+			this->tabPage4->ResumeLayout(false);
+			this->tabPage4->PerformLayout();
+			this->grpQuestion2->ResumeLayout(false);
+			this->groupBox1->ResumeLayout(false);
+			this->grpEmployeeInfo->ResumeLayout(false);
+			this->grpEmployeeInfo->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numExperience))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numAge))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -816,14 +1029,14 @@ namespace Word {
 			toolStripStatusLabel2 = gcnew System::Windows::Forms::ToolStripStatusLabel();
 			toolStripStatusLabel3 = gcnew System::Windows::Forms::ToolStripStatusLabel();
 
-			toolStripStatusLabel1->Text = "�����";
+			toolStripStatusLabel1->Text = "Готов";
 			toolStripStatusLabel1->Spring = true;
 			toolStripStatusLabel1->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 
-			toolStripStatusLabel2->Text = "��������: 0";
+			toolStripStatusLabel2->Text = "Символов: 0";
 			toolStripStatusLabel2->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 
-			toolStripStatusLabel3->Text = "���: 1 ���: 0";
+			toolStripStatusLabel3->Text = "Стр: 1 Кол: 0";
 			toolStripStatusLabel3->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 
 			statusStrip1->Items->Add(toolStripStatusLabel1);
@@ -833,22 +1046,22 @@ namespace Word {
 
 		void UpdateStatusBar(System::Object^ sender, System::EventArgs^ e) {
 			int charCount = richTextBox1->Text->Length;
-			toolStripStatusLabel2->Text = "��������: " + charCount;
+			toolStripStatusLabel2->Text = "Символов: " + charCount;
 
 			int selectionStart = richTextBox1->SelectionStart;
 			int lineIndex = richTextBox1->GetLineFromCharIndex(selectionStart);
 			int columnIndex = selectionStart - richTextBox1->GetFirstCharIndexFromLine(lineIndex);
 
-			toolStripStatusLabel3->Text = "���: " + (lineIndex + 1) + " ���: " + (columnIndex + 1);
+			toolStripStatusLabel3->Text = "Стр: " + (lineIndex + 1) + " Кол: " + (columnIndex + 1);
 
 			if (isModified) {
 				if (!this->Text->EndsWith("*")) {
-					this->Text = "��� Word *";
+					this->Text = "Мой Word *";
 				}
 			}
 			else {
 				if (this->Text->EndsWith("*")) {
-					this->Text = "��� Word";
+					this->Text = "Мой Word";
 				}
 			}
 		}
@@ -856,8 +1069,8 @@ namespace Word {
 		void NewDocument() {
 			if (isModified) {
 				System::Windows::Forms::DialogResult result = MessageBox::Show(
-					"��������� ��������� � ������� ���������?",
-					"�������������",
+					"Сохранить изменения в текущем документе?",
+					"Подтверждение",
 					MessageBoxButtons::YesNoCancel,
 					MessageBoxIcon::Question);
 
@@ -872,15 +1085,15 @@ namespace Word {
 			richTextBox1->Clear();
 			currentFileName = nullptr;
 			isModified = false;
-			toolStripStatusLabel1->Text = "����� ��������";
-			this->Text = "��� Word";
+			toolStripStatusLabel1->Text = "Новый документ";
+			this->Text = "Мой Word";
 		}
 
 		void OpenDocument() {
 			if (isModified) {
 				System::Windows::Forms::DialogResult result = MessageBox::Show(
-					"��������� ��������� � ������� ���������?",
-					"�������������",
+					"Сохранить изменения в текущем документе?",
+					"Подтверждение",
 					MessageBoxButtons::YesNoCancel,
 					MessageBoxIcon::Question);
 
@@ -909,11 +1122,11 @@ namespace Word {
 
 					currentFileName = openFileDialog->FileName;
 					isModified = false;
-					toolStripStatusLabel1->Text = "������: " + System::IO::Path::GetFileName(currentFileName);
-					this->Text = "��� Word - " + System::IO::Path::GetFileName(currentFileName);
+					toolStripStatusLabel1->Text = "Открыт: " + System::IO::Path::GetFileName(currentFileName);
+					this->Text = "Мой Word - " + System::IO::Path::GetFileName(currentFileName);
 				}
 				catch (Exception^ ex) {
-					MessageBox::Show("������ ��� �������� �����: " + ex->Message, "������",
+					MessageBox::Show("Ошибка при открытии файла: " + ex->Message, "Ошибка",
 						MessageBoxButtons::OK, MessageBoxIcon::Error);
 				}
 			}
@@ -935,11 +1148,11 @@ namespace Word {
 				}
 
 				isModified = false;
-				toolStripStatusLabel1->Text = "���������: " + System::IO::Path::GetFileName(currentFileName);
-				this->Text = "��� Word - " + System::IO::Path::GetFileName(currentFileName);
+				toolStripStatusLabel1->Text = "Сохранено: " + System::IO::Path::GetFileName(currentFileName);
+				this->Text = "Мой Word - " + System::IO::Path::GetFileName(currentFileName);
 			}
 			catch (Exception^ ex) {
-				MessageBox::Show("������ ��� ���������� �����: " + ex->Message, "������",
+				MessageBox::Show("Ошибка при сохранении файла: " + ex->Message, "Ошибка",
 					MessageBoxButtons::OK, MessageBoxIcon::Error);
 			}
 		}
@@ -949,7 +1162,7 @@ namespace Word {
 			saveFileDialog->Filter = "Rich Text Format (*.rtf)|*.rtf|Text Files (*.txt)|*.txt";
 			saveFileDialog->FilterIndex = 1;
 			saveFileDialog->RestoreDirectory = true;
-			saveFileDialog->FileName = "��������1.rtf";
+			saveFileDialog->FileName = "Документ1.rtf";
 
 			if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 				currentFileName = saveFileDialog->FileName;
@@ -975,21 +1188,21 @@ namespace Word {
 	private: System::Void cutToolStripButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (richTextBox1->SelectedText != "") {
 			richTextBox1->Cut();
-			toolStripStatusLabel1->Text = "��������";
+			toolStripStatusLabel1->Text = "Вырезано";
 		}
 	}
 
 	private: System::Void copyToolStripButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (richTextBox1->SelectedText != "") {
 			richTextBox1->Copy();
-			toolStripStatusLabel1->Text = "�����������";
+			toolStripStatusLabel1->Text = "Скопировано";
 		}
 	}
 
 	private: System::Void pasteToolStripButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (Clipboard::ContainsText()) {
 			richTextBox1->Paste();
-			toolStripStatusLabel1->Text = "���������";
+			toolStripStatusLabel1->Text = "Вставлено";
 		}
 	}
 
@@ -1069,15 +1282,15 @@ namespace Word {
 	}
 private: System::Void alignLeftButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	richTextBox1->SelectionAlignment = HorizontalAlignment::Left;
-	toolStripStatusLabel1->Text = "������������: �����";
+	toolStripStatusLabel1->Text = "Выравнивание: влево";
 }
 private: System::Void alignCenterButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	richTextBox1->SelectionAlignment = HorizontalAlignment::Center;
-	toolStripStatusLabel1->Text = "������������: �� ������";
+	toolStripStatusLabel1->Text = "Выравнивание: по центру";
 }
 private: System::Void alignRightButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	richTextBox1->SelectionAlignment = HorizontalAlignment::Right;
-	toolStripStatusLabel1->Text = "������������: ������";
+	toolStripStatusLabel1->Text = "Выравнивание: вправо";
 }
 private: System::Void fontSizeComboBox_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (fontSizeComboBox->SelectedItem != nullptr) {
@@ -1089,47 +1302,47 @@ private: System::Void fontSizeComboBox_SelectedIndexChanged(System::Object^ send
 }
 private: System::Void insertImageButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
-	openFileDialog->Filter = "�����������|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff|��� �����|*.*";
-	openFileDialog->Title = "�������� ����������� ��� �������";
+	openFileDialog->Filter = "Изображения|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff|Все файлы|*.*";
+	openFileDialog->Title = "Выберите изображение для вставки";
 	openFileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::MyPictures);
 
 	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		try {
-			// ��������� ������� ���������� ������ ������ (������������ ������)
+			// Сохраняем текущее содержимое буфера обмена (исправленная строка)
 			System::Windows::Forms::IDataObject^ savedClipboard = Clipboard::GetDataObject();
 
-			// ��������� ����������� �� ���������� �����
+			// Загружаем изображение из выбранного файла
 			System::Drawing::Image^ image = System::Drawing::Image::FromFile(openFileDialog->FileName);
 
-			// �������� ����������� � ����� ������
+			// Копируем изображение в буфер обмена
 			Clipboard::SetImage(image);
 
-			// ��������� �����������
+			// Вставляем изображение
 			richTextBox1->Paste();
 
-			toolStripStatusLabel1->Text = "����������� ���������: " + System::IO::Path::GetFileName(openFileDialog->FileName);
+			toolStripStatusLabel1->Text = "Изображение вставлено: " + System::IO::Path::GetFileName(openFileDialog->FileName);
 
-			// ��������������� ����������� ���������� ������ ������
+			// Восстанавливаем сохраненное содержимое буфера обмена
 			if (savedClipboard != nullptr) {
 				Clipboard::SetDataObject(savedClipboard);
 			}
 
 		}
 		catch (Exception^ ex) {
-			MessageBox::Show("������ ��� ������� �����������: " + ex->Message, "������",
+			MessageBox::Show("Ошибка при вставке изображения: " + ex->Message, "Ошибка",
 				MessageBoxButtons::OK, MessageBoxIcon::Error);
 		}
 	}
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-	// ������ �� ������
+	// ничего не делаем
 }
 
 private: System::Void txtOutput_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	// ����� �������� ������
+	// можно оставить пустым
 }
 
-	   // �����
+	   // Цифры
 private: System::Void ONE_Click(System::Object^ sender, System::EventArgs^ e) {
 	txtOutput->Text += "1";
 }
@@ -1170,17 +1383,45 @@ private: System::Void ZERO_Click(System::Object^ sender, System::EventArgs^ e) {
 	txtOutput->Text += "0";
 }
 
-	   // ����� (���������� �����������)
+	   // Точка (десятичный разделитель)
 private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^ e) {
-	// ���������, ���� �� ��� ����� � ������� ����� (������� �������� ���������� �������)
-	if (!txtOutput->Text->EndsWith(",") && !txtOutput->Text->Contains(",")) {
+	String^ text = txtOutput->Text;
+
+	// Если поле пустое, начинаем с "0,"
+	if (text->Length == 0) {
+		txtOutput->Text = "0,";
+		return;
+	}
+
+	// Находим позицию последнего оператора
+	int lastOperatorPos = -1;
+	array<wchar_t>^ operators = { '+', '-', '*', '/' };
+
+	for (int i = text->Length - 1; i >= 0; i--) {
+		if (Array::IndexOf(operators, text[i]) >= 0) {
+			lastOperatorPos = i;
+			break;
+		}
+	}
+
+	// Получаем последнее число (от последнего оператора до конца)
+	String^ lastNumber;
+	if (lastOperatorPos >= 0) {
+		lastNumber = text->Substring(lastOperatorPos + 1);
+	}
+	else {
+		lastNumber = text; // всё выражение - одно число
+	}
+
+	// Проверяем, есть ли уже запятая в последнем числе
+	if (!lastNumber->Contains(",")) {
 		txtOutput->Text += ",";
 	}
 }
 
-	   // ��������
+	   // Операции
 private: System::Void PLUSbutton_Click(System::Object^ sender, System::EventArgs^ e) {
-	// ��������� ��������, ���� ��������� ������ �� ��������
+	// Добавляем оператор, если последний символ не оператор
 	if (!IsLastCharOperator()) {
 		txtOutput->Text += "+";
 	}
@@ -1204,38 +1445,247 @@ private: System::Void DIVIDEbutton_Click(System::Object^ sender, System::EventAr
 	}
 }
 
-	   // �������
+	   // Очистка
 private: System::Void Cbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	txtOutput->Text = "";
 }
 
-	   // �������� ���������� �������
+	   // Удаление последнего символа
 private: System::Void DELbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	if (txtOutput->Text->Length > 0) {
 		txtOutput->Text = txtOutput->Text->Substring(0, txtOutput->Text->Length - 1);
 	}
 }
 
-	   // �����
+	   // Равно
 private: System::Void EQUALSbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	try {
-		// ���������� DataTable ��� ���������� ���������
+		// Используем DataTable для вычисления выражения
 		System::Data::DataTable^ table = gcnew System::Data::DataTable();
-		// �������� ������� �� ����� ��� ���������� (���� ���������)
+		// Заменяем запятую на точку для вычислений (если требуется)
 		String^ expression = txtOutput->Text->Replace(",", ".");
 		Object^ result = table->Compute(expression, "");
 		txtOutput->Text = result->ToString()->Replace(".", ",");
 	}
 	catch (Exception^ ex) {
-		MessageBox::Show("������ � ���������", "�����������", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		MessageBox::Show("Ошибка в выражении", "Калькулятор", MessageBoxButtons::OK, MessageBoxIcon::Error);
 	}
 }
 
-	   // ��������������� ����� ��� �������� ���������� �������
+	   // Вспомогательный метод для проверки последнего символа
 private: bool IsLastCharOperator() {
 	if (txtOutput->Text->Length == 0) return false;
 	wchar_t last = txtOutput->Text[txtOutput->Text->Length - 1];
 	return (last == '+' || last == '-' || last == '*' || last == '/');
+}
+private: System::Void grpEmployeeInfo_Enter(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void numAge_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	btnUpdateQuestions_Click(sender, e);
+}
+private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void numExperience_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	btnUpdateQuestions_Click(sender, e);
+}
+private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblQuestion1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void cmbAnswer1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void grpQuestion2_Enter(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblQuestion2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void cmbAnswer2_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void lblResult_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void btnUpdateQuestions_Click(System::Object^ sender, System::EventArgs^ e) {
+	int age = Convert::ToInt32(numAge->Value);
+	int experience = Convert::ToInt32(numExperience->Value);
+
+	// Очищаем комбобоксы
+	cmbAnswer1->Items->Clear();
+	cmbAnswer2->Items->Clear();
+
+	// Вопрос 1 зависит от возраста
+	if (age < 30) {
+		lblQuestion1->Text = "Как вы оцениваете возможности карьерного роста?";
+		cmbAnswer1->Items->AddRange(gcnew array<Object^> {
+			"Отлично", "Хорошо", "Удовлетворительно", "Плохо"
+		});
+	}
+	else if (age >= 30 && age < 50) {
+		lblQuestion1->Text = "Удовлетворены ли вы балансом работы и личной жизни?";
+		cmbAnswer1->Items->AddRange(gcnew array<Object^> {
+			"Полностью удовлетворен", "Скорее удовлетворен",
+				"Скорее не удовлетворен", "Совсем не удовлетворен"
+		});
+	}
+	else {
+		lblQuestion1->Text = "Планируете ли вы выходить на пенсию в ближайшие 5 лет?";
+		cmbAnswer1->Items->AddRange(gcnew array<Object^> {
+			"Да, планирую", "Возможно", "Нет, не планирую", "Ещё не думал(а)"
+		});
+	}
+
+	// Вопрос 2 зависит от стажа
+	if (experience < 3) {
+		lblQuestion2->Text = "Как вы оцениваете процесс адаптации новых сотрудников?";
+		cmbAnswer2->Items->AddRange(gcnew array<Object^> {
+			"Отлично", "Хорошо", "Удовлетворительно", "Плохо"
+		});
+	}
+	else if (experience >= 3 && experience < 10) {
+		lblQuestion2->Text = "Что мотивирует вас оставаться в компании?";
+		cmbAnswer2->Items->AddRange(gcnew array<Object^> {
+			"Зарплата", "Коллектив", "Интересные задачи", "Карьерный рост"
+		});
+	}
+	else {
+		lblQuestion2->Text = "Готовы ли вы обучать новых сотрудников?";
+		cmbAnswer2->Items->AddRange(gcnew array<Object^> {
+			"Да, с удовольствием", "Если попросят", "Нет, не готов(а)", "Уже обучаю"
+		});
+	}
+
+	// Устанавливаем первый элемент как выбранный по умолчанию
+	if (cmbAnswer1->Items->Count > 0) cmbAnswer1->SelectedIndex = 0;
+	if (cmbAnswer2->Items->Count > 0) cmbAnswer2->SelectedIndex = 0;
+
+	lblResult->Text = "Вопросы обновлены. Выберите ответы и нажмите 'Проверить'.";
+}
+private: System::Void btnCheckAnswers_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Проверяем, выбраны ли ответы
+	if (cmbAnswer1->SelectedIndex == -1 || cmbAnswer2->SelectedIndex == -1) {
+		MessageBox::Show("Пожалуйста, ответьте на все вопросы.", "Внимание",
+			MessageBoxButtons::OK, MessageBoxIcon::Warning);
+		return;
+	}
+
+	int age = Convert::ToInt32(numAge->Value);
+	int experience = Convert::ToInt32(numExperience->Value);
+
+	String^ result = "===== РЕЗУЛЬТАТЫ ОПРОСА =====\n\n";
+	result += "Возраст: " + age + " лет\n";
+	result += "Стаж: " + experience + " лет\n\n";
+
+	// Анализ ответа на первый вопрос
+	result += "Вопрос 1: " + lblQuestion1->Text + "\n";
+	result += "Ответ: " + cmbAnswer1->Text + "\n";
+
+	// Комментарий к первому вопросу в зависимости от возраста
+	if (age < 30) {
+		if (cmbAnswer1->SelectedIndex <= 1) // Отлично или Хорошо
+			result += "Молодой сотрудник позитивно оценивает карьерные перспективы.\n";
+		else
+			result += "Стоит обсудить карьерные ожидания и возможности роста.\n";
+	}
+	else if (age >= 30 && age < 50) {
+		if (cmbAnswer1->SelectedIndex <= 1) // Полностью/Скорее удовлетворен
+			result += "Хороший баланс работы и личной жизни.\n";
+		else
+			result += "Возможен риск выгорания - обсудить нагрузку.\n";
+	}
+	else {
+		if (cmbAnswer1->SelectedIndex == 0) // Да, планирую
+			result += "Важно подготовить план передачи знаний.\n";
+		else if (cmbAnswer1->SelectedIndex == 1) // Возможно
+			result += "Обсудить планы в индивидуальном порядке.\n";
+		else
+			result += "Сотрудник планирует работать дальше.\n";
+	}
+
+	result += "\n";
+
+	// Анализ ответа на второй вопрос
+	result += "Вопрос 2: " + lblQuestion2->Text + "\n";
+	result += "Ответ: " + cmbAnswer2->Text + "\n";
+
+	// Комментарий ко второму вопросу в зависимости от стажа
+	if (experience < 3) {
+		if (cmbAnswer2->SelectedIndex <= 1) // Отлично/Хорошо
+			result += "Адаптация проходит успешно.\n";
+		else
+			result += "Требуется улучшить программу адаптации.\n";
+	}
+	else if (experience >= 3 && experience < 10) {
+		switch (cmbAnswer2->SelectedIndex) {
+		case 0: // Зарплата
+			result += "Регулярно пересматривать компенсацию.\n";
+			break;
+		case 1: // Коллектив
+			result += "Поддерживать командные мероприятия.\n";
+			break;
+		case 2: // Интересные задачи
+			result += "Предлагать новые проекты и вызовы.\n";
+			break;
+		case 3: // Карьерный рост
+			result += "Разработать индивидуальный план развития.\n";
+			break;
+		}
+	}
+	else {
+		switch (cmbAnswer2->SelectedIndex) {
+		case 0: // Да, с удовольствием
+			result += "Отличный кандидат в наставники.\n";
+			break;
+		case 1: // Если попросят
+			result += "Можно привлекать к обучению.\n";
+			break;
+		case 2: // Нет, не готов(а)
+			result += "Выяснить причины нежелания обучать.\n";
+			break;
+		case 3: // Уже обучаю
+			result += "Активный наставник - отметить и поощрить!\n";
+			break;
+		}
+	}
+
+	result += "\n===== ОБЩАЯ РЕКОМЕНДАЦИЯ =====\n";
+
+	// Общая рекомендация на основе возраста и стажа
+	if (age < 30 && experience < 3) {
+		result += "Молодой специалист. Рекомендуется:\n";
+		result += "- Назначить наставника\n";
+		result += "- Проводить регулярные 1-on-1 встречи\n";
+		result += "- Составить план развития на год";
+	}
+	else if (age < 30 && experience >= 3) {
+		result += "Перспективный сотрудник. Рекомендуется:\n";
+		result += "- Рассмотреть возможность повышения\n";
+		result += "- Давать более сложные задачи\n";
+		result += "- Отправить на профильное обучение";
+	}
+	else if (age >= 30 && age < 45 && experience >= 5) {
+		result += "Опытный специалист - основа команды. Рекомендуется:\n";
+		result += "- Привлекать к принятию решений\n";
+		result += "- Рассмотреть как тимлида\n";
+		result += "- Предложить участие в найме";
+	}
+	else if (age >= 45 && age < 60 && experience >= 10) {
+		result += "Эксперт с большим опытом. Рекомендуется:\n";
+		result += "- Сделать наставником молодёжи\n";
+		result += "- Привлекать к сложным проектам\n";
+		result += "- Учитывать мнение при стратегических решениях";
+	}
+	else if (age >= 60 && experience >= 15) {
+		result += "Ветеран компании. Рекомендуется:\n";
+		result += "- Обсудить планы по передаче опыта\n";
+		result += "- Рассмотреть гибкий график\n";
+		result += "- Отметить вклад в развитие компании";
+	}
+	else {
+		result += "Индивидуальный подход на основе ответов.\n";
+		result += "Провести дополнительную встречу для детального обсуждения.";
+	}
+
+	lblResult->Text = result;
+
 }
 };
 }
