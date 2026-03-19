@@ -55,8 +55,6 @@ namespace Word {
 
 
 
-		// Добавленные элементы
-
 
 
 
@@ -1358,7 +1356,7 @@ private: System::Void insertImageButton_Click(System::Object^ sender, System::Ev
 
 	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		try {
-			// Сохраняем текущее содержимое буфера обмена (исправленная строка)
+			// Сохраняем текущее содержимое буфера обмена 
 			System::Windows::Forms::IDataObject^ savedClipboard = Clipboard::GetDataObject();
 
 			// Загружаем изображение из выбранного файла
@@ -1385,11 +1383,11 @@ private: System::Void insertImageButton_Click(System::Object^ sender, System::Ev
 	}
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-	// ничего не делаем
+	
 }
 
 private: System::Void txtOutput_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	// можно оставить пустым
+
 }
 
 	   // Цифры
@@ -1433,7 +1431,7 @@ private: System::Void ZERO_Click(System::Object^ sender, System::EventArgs^ e) {
 	txtOutput->Text += "0";
 }
 
-	   // Точка (десятичный разделитель)
+	   // Точка 
 private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ text = txtOutput->Text;
 
@@ -1454,7 +1452,7 @@ private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^
 		}
 	}
 
-	// Получаем последнее число (от последнего оператора до конца)
+	// Получаем последнее число
 	String^ lastNumber;
 	if (lastOperatorPos >= 0) {
 		lastNumber = text->Substring(lastOperatorPos + 1);
@@ -1510,9 +1508,9 @@ private: System::Void DELbutton_Click(System::Object^ sender, System::EventArgs^
 	   // Равно
 private: System::Void EQUALSbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	try {
-		// Используем DataTable для вычисления выражения
+		
 		System::Data::DataTable^ table = gcnew System::Data::DataTable();
-		// Заменяем запятую на точку для вычислений (если требуется)
+		// Заменяем запятую на точку для вычислений 
 		String^ expression = txtOutput->Text->Replace(",", ".");
 		Object^ result = table->Compute(expression, "");
 		txtOutput->Text = result->ToString()->Replace(".", ",");
