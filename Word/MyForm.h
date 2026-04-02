@@ -64,6 +64,12 @@ namespace Word {
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel3;
 
 		bool isModified;
+		// Переменные для Paint
+		bool isDrawing;
+		Point lastPoint;
+		Color currentColor;
+		int penThickness;
+		bool isErasing;
 		String^ currentFileName;
 	private: System::Windows::Forms::TabPage^ tabPage4;
 	private: System::Windows::Forms::Label^ lblResult;
@@ -107,7 +113,7 @@ namespace Word {
 	private: System::Windows::Forms::StatusStrip^ statusStrip1;
 	private: System::Windows::Forms::RichTextBox^ richTextBox1;
 	private: System::Windows::Forms::TabPage^ tabPage1;
-	private: System::Windows::Forms::Button^ btnClearHistory;
+
 	private: System::Windows::Forms::ListBox^ lstHistory;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ DIVIDEbutton;
@@ -130,8 +136,28 @@ namespace Word {
 	private: System::Windows::Forms::TextBox^ txtOutput;
 	private: System::Windows::Forms::Button^ ZERO;
 	private: System::Windows::Forms::TabControl^ tabControl1;
-private: System::Windows::Forms::Button^ btnSaveHistory;
-private: System::Windows::Forms::Button^ btnOpenHistory;
+
+
+private: System::Windows::Forms::TabPage^ tabPage3;
+private: System::Windows::Forms::MenuStrip^ menuStrip1;
+private: System::Windows::Forms::ToolStripMenuItem^ файлToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^ btnSaveHistory2;
+private: System::Windows::Forms::ToolStripMenuItem^ btnClearHistory2;
+
+
+private: System::Windows::Forms::ToolStrip^ toolStrip2;
+private: System::Windows::Forms::ToolStripMenuItem^ btnOpenHistory2;
+private: System::Windows::Forms::PictureBox^ paintCanvas;
+private: System::Windows::Forms::ToolStripButton^ penButton;
+private: System::Windows::Forms::ToolStripButton^ eraserButton;
+private: System::Windows::Forms::ToolStripButton^ colorButtonPaint;
+
+private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator4;
+private: System::Windows::Forms::ToolStripButton^ clearButtonPaint;
+private: System::Windows::Forms::ToolStripButton^ saveImageButton;
+private: System::Windows::Forms::ToolStripButton^ loadImageButtonPaint;
+private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
+
 
 		System::ComponentModel::IContainer^ components;
 
@@ -183,9 +209,6 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
-			this->btnOpenHistory = (gcnew System::Windows::Forms::Button());
-			this->btnSaveHistory = (gcnew System::Windows::Forms::Button());
-			this->btnClearHistory = (gcnew System::Windows::Forms::Button());
 			this->lstHistory = (gcnew System::Windows::Forms::ListBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->DIVIDEbutton = (gcnew System::Windows::Forms::Button());
@@ -207,7 +230,23 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->DOTbutton = (gcnew System::Windows::Forms::Button());
 			this->txtOutput = (gcnew System::Windows::Forms::TextBox());
 			this->ZERO = (gcnew System::Windows::Forms::Button());
+			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
+			this->файлToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->btnSaveHistory2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->btnClearHistory2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->btnOpenHistory2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
+			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
+			this->paintCanvas = (gcnew System::Windows::Forms::PictureBox());
+			this->toolStrip2 = (gcnew System::Windows::Forms::ToolStrip());
+			this->penButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->eraserButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->colorButtonPaint = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripSeparator4 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->clearButtonPaint = (gcnew System::Windows::Forms::ToolStripButton());
+			this->saveImageButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->loadImageButtonPaint = (gcnew System::Windows::Forms::ToolStripButton());
+			this->thicknessComboBox = (gcnew System::Windows::Forms::ToolStripComboBox());
 			this->tabPage4->SuspendLayout();
 			this->grpQuestion2->SuspendLayout();
 			this->groupBox1->SuspendLayout();
@@ -217,7 +256,11 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->tabPage2->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
+			this->menuStrip1->SuspendLayout();
 			this->tabControl1->SuspendLayout();
+			this->tabPage3->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->paintCanvas))->BeginInit();
+			this->toolStrip2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// tabPage4
@@ -633,9 +676,6 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			// tabPage1
 			// 
 			this->tabPage1->BackColor = System::Drawing::Color::Black;
-			this->tabPage1->Controls->Add(this->btnOpenHistory);
-			this->tabPage1->Controls->Add(this->btnSaveHistory);
-			this->tabPage1->Controls->Add(this->btnClearHistory);
 			this->tabPage1->Controls->Add(this->lstHistory);
 			this->tabPage1->Controls->Add(this->label1);
 			this->tabPage1->Controls->Add(this->DIVIDEbutton);
@@ -657,42 +697,13 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->tabPage1->Controls->Add(this->DOTbutton);
 			this->tabPage1->Controls->Add(this->txtOutput);
 			this->tabPage1->Controls->Add(this->ZERO);
+			this->tabPage1->Controls->Add(this->menuStrip1);
 			this->tabPage1->Location = System::Drawing::Point(4, 22);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
 			this->tabPage1->Size = System::Drawing::Size(997, 686);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Калькулятор";
-			// 
-			// btnOpenHistory
-			// 
-			this->btnOpenHistory->Location = System::Drawing::Point(17, 525);
-			this->btnOpenHistory->Name = L"btnOpenHistory";
-			this->btnOpenHistory->Size = System::Drawing::Size(318, 23);
-			this->btnOpenHistory->TabIndex = 48;
-			this->btnOpenHistory->Text = L"Открыть историю";
-			this->btnOpenHistory->UseVisualStyleBackColor = true;
-			this->btnOpenHistory->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory_Click);
-			// 
-			// btnSaveHistory
-			// 
-			this->btnSaveHistory->Location = System::Drawing::Point(17, 495);
-			this->btnSaveHistory->Name = L"btnSaveHistory";
-			this->btnSaveHistory->Size = System::Drawing::Size(318, 23);
-			this->btnSaveHistory->TabIndex = 47;
-			this->btnSaveHistory->Text = L"Сохранить историю";
-			this->btnSaveHistory->UseVisualStyleBackColor = true;
-			this->btnSaveHistory->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory_Click);
-			// 
-			// btnClearHistory
-			// 
-			this->btnClearHistory->Location = System::Drawing::Point(17, 465);
-			this->btnClearHistory->Name = L"btnClearHistory";
-			this->btnClearHistory->Size = System::Drawing::Size(318, 23);
-			this->btnClearHistory->TabIndex = 46;
-			this->btnClearHistory->Text = L"Очистить историю";
-			this->btnClearHistory->UseVisualStyleBackColor = true;
-			this->btnClearHistory->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory_Click);
 			// 
 			// lstHistory
 			// 
@@ -718,7 +729,7 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 				static_cast<System::Byte>(204)));
 			this->label1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(149)), static_cast<System::Int32>(static_cast<System::Byte>(149)),
 				static_cast<System::Int32>(static_cast<System::Byte>(149)));
-			this->label1->Location = System::Drawing::Point(105, 25);
+			this->label1->Location = System::Drawing::Point(94, 33);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(118, 21);
 			this->label1->TabIndex = 44;
@@ -1064,16 +1075,177 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->ZERO->UseVisualStyleBackColor = false;
 			this->ZERO->Click += gcnew System::EventHandler(this, &MyForm::ZERO_Click);
 			// 
+			// menuStrip1
+			// 
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->файлToolStripMenuItem });
+			this->menuStrip1->Location = System::Drawing::Point(3, 3);
+			this->menuStrip1->Name = L"menuStrip1";
+			this->menuStrip1->Size = System::Drawing::Size(991, 24);
+			this->menuStrip1->TabIndex = 49;
+			this->menuStrip1->Text = L"menuStrip1";
+			// 
+			// файлToolStripMenuItem
+			// 
+			this->файлToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->btnSaveHistory2,
+					this->btnClearHistory2, this->btnOpenHistory2
+			});
+			this->файлToolStripMenuItem->Name = L"файлToolStripMenuItem";
+			this->файлToolStripMenuItem->Size = System::Drawing::Size(48, 20);
+			this->файлToolStripMenuItem->Text = L"Файл";
+			this->файлToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::файлToolStripMenuItem_Click);
+			// 
+			// btnSaveHistory2
+			// 
+			this->btnSaveHistory2->Name = L"btnSaveHistory2";
+			this->btnSaveHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnSaveHistory2->Text = L"Сохранить";
+			this->btnSaveHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory2_Click);
+			// 
+			// btnClearHistory2
+			// 
+			this->btnClearHistory2->Name = L"btnClearHistory2";
+			this->btnClearHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnClearHistory2->Text = L"Очистить";
+			this->btnClearHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory2_Click);
+			// 
+			// btnOpenHistory2
+			// 
+			this->btnOpenHistory2->Name = L"btnOpenHistory2";
+			this->btnOpenHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnOpenHistory2->Text = L"Открыть";
+			this->btnOpenHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory2_Click);
+			// 
 			// tabControl1
 			// 
 			this->tabControl1->Controls->Add(this->tabPage1);
 			this->tabControl1->Controls->Add(this->tabPage2);
 			this->tabControl1->Controls->Add(this->tabPage4);
+			this->tabControl1->Controls->Add(this->tabPage3);
 			this->tabControl1->Location = System::Drawing::Point(1, 2);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
 			this->tabControl1->Size = System::Drawing::Size(1005, 712);
 			this->tabControl1->TabIndex = 0;
+			// 
+			// tabPage3
+			// 
+			this->tabPage3->Controls->Add(this->paintCanvas);
+			this->tabPage3->Controls->Add(this->toolStrip2);
+			this->tabPage3->Location = System::Drawing::Point(4, 22);
+			this->tabPage3->Name = L"tabPage3";
+			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
+			this->tabPage3->Size = System::Drawing::Size(997, 686);
+			this->tabPage3->TabIndex = 4;
+			this->tabPage3->Text = L"Paint";
+			this->tabPage3->UseVisualStyleBackColor = true;
+			this->tabPage3->Click += gcnew System::EventHandler(this, &MyForm::tabPage3_Click_1);
+			// 
+			// paintCanvas
+			// 
+			this->paintCanvas->BackColor = System::Drawing::Color::White;
+			this->paintCanvas->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->paintCanvas->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->paintCanvas->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->paintCanvas->Location = System::Drawing::Point(3, 28);
+			this->paintCanvas->Name = L"paintCanvas";
+			this->paintCanvas->Size = System::Drawing::Size(991, 655);
+			this->paintCanvas->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+			this->paintCanvas->TabIndex = 1;
+			this->paintCanvas->TabStop = false;
+			this->paintCanvas->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::paintCanvas_MouseDown);
+			this->paintCanvas->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::paintCanvas_MouseMove);
+			this->paintCanvas->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::paintCanvas_MouseUp);
+			// 
+			// toolStrip2
+			// 
+			this->toolStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(8) {
+				this->penButton, this->eraserButton,
+					this->colorButtonPaint, this->toolStripSeparator4, this->clearButtonPaint, this->saveImageButton, this->loadImageButtonPaint,
+					this->thicknessComboBox
+			});
+			this->toolStrip2->Location = System::Drawing::Point(3, 3);
+			this->toolStrip2->Name = L"toolStrip2";
+			this->toolStrip2->Size = System::Drawing::Size(991, 25);
+			this->toolStrip2->TabIndex = 0;
+			this->toolStrip2->Text = L"toolStrip2";
+			// 
+			// penButton
+			// 
+			this->penButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->penButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"penButton.Image")));
+			this->penButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->penButton->Name = L"penButton";
+			this->penButton->Size = System::Drawing::Size(23, 22);
+			this->penButton->Text = L"Карандаш";
+			this->penButton->Click += gcnew System::EventHandler(this, &MyForm::penButton_Click);
+			// 
+			// eraserButton
+			// 
+			this->eraserButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->eraserButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"eraserButton.Image")));
+			this->eraserButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->eraserButton->Name = L"eraserButton";
+			this->eraserButton->Size = System::Drawing::Size(23, 22);
+			this->eraserButton->Text = L"Ластик";
+			this->eraserButton->Click += gcnew System::EventHandler(this, &MyForm::eraserButton_Click);
+			// 
+			// colorButtonPaint
+			// 
+			this->colorButtonPaint->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->colorButtonPaint->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"colorButtonPaint.Image")));
+			this->colorButtonPaint->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->colorButtonPaint->Name = L"colorButtonPaint";
+			this->colorButtonPaint->Size = System::Drawing::Size(23, 22);
+			this->colorButtonPaint->Text = L"Цвет кисти";
+			this->colorButtonPaint->Click += gcnew System::EventHandler(this, &MyForm::colorButtonPaint_Click);
+			// 
+			// toolStripSeparator4
+			// 
+			this->toolStripSeparator4->Name = L"toolStripSeparator4";
+			this->toolStripSeparator4->Size = System::Drawing::Size(6, 25);
+			// 
+			// clearButtonPaint
+			// 
+			this->clearButtonPaint->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->clearButtonPaint->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"clearButtonPaint.Image")));
+			this->clearButtonPaint->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->clearButtonPaint->Name = L"clearButtonPaint";
+			this->clearButtonPaint->Size = System::Drawing::Size(23, 22);
+			this->clearButtonPaint->Text = L"Очистить всё";
+			this->clearButtonPaint->Click += gcnew System::EventHandler(this, &MyForm::clearButtonPaint_Click);
+			// 
+			// saveImageButton
+			// 
+			this->saveImageButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->saveImageButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"saveImageButton.Image")));
+			this->saveImageButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->saveImageButton->Name = L"saveImageButton";
+			this->saveImageButton->Size = System::Drawing::Size(23, 22);
+			this->saveImageButton->Text = L"Сохранить рисунок";
+			this->saveImageButton->Click += gcnew System::EventHandler(this, &MyForm::saveImageButton_Click);
+			// 
+			// loadImageButtonPaint
+			// 
+			this->loadImageButtonPaint->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->loadImageButtonPaint->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"loadImageButtonPaint.Image")));
+			this->loadImageButtonPaint->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->loadImageButtonPaint->Name = L"loadImageButtonPaint";
+			this->loadImageButtonPaint->Size = System::Drawing::Size(23, 22);
+			this->loadImageButtonPaint->Text = L"Загрузить изображение";
+			this->loadImageButtonPaint->Click += gcnew System::EventHandler(this, &MyForm::loadImageButtonPaint_Click);
+			// 
+			// thicknessComboBox
+			// 
+			this->thicknessComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
+				L"1", L"2", L"3", L"4", L"5", L"6", L"7",
+					L"8", L"9", L"10"
+			});
+			this->thicknessComboBox->Name = L"thicknessComboBox";
+			this->thicknessComboBox->Size = System::Drawing::Size(75, 25);
+			this->thicknessComboBox->Text = L"3";
+			this->thicknessComboBox->ToolTipText = L"Толщина кисти";
+			this->thicknessComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::thicknessComboBox_SelectedIndexChanged);
 			// 
 			// MyForm
 			// 
@@ -1081,6 +1253,7 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1029, 630);
 			this->Controls->Add(this->tabControl1);
+			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MyForm::MyForm_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load_1);
@@ -1098,7 +1271,14 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 			this->toolStrip1->PerformLayout();
 			this->tabPage1->ResumeLayout(false);
 			this->tabPage1->PerformLayout();
+			this->menuStrip1->ResumeLayout(false);
+			this->menuStrip1->PerformLayout();
 			this->tabControl1->ResumeLayout(false);
+			this->tabPage3->ResumeLayout(false);
+			this->tabPage3->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->paintCanvas))->EndInit();
+			this->toolStrip2->ResumeLayout(false);
+			this->toolStrip2->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -1359,6 +1539,23 @@ private: System::Windows::Forms::Button^ btnOpenHistory;
 		}
 	}
 	private: System::Void MyForm_Load_1(System::Object^ sender, System::EventArgs^ e) {
+		// Проверяем, есть ли уже изображение в PictureBox
+		if (paintCanvas->Image == nullptr) {
+			// Создаём пустой Bitmap размером с PictureBox
+			System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(paintCanvas->Width, paintCanvas->Height);
+
+			// Создаём объект Graphics для рисования на этом Bitmap
+			System::Drawing::Graphics^ g = System::Drawing::Graphics::FromImage(bmp);
+
+			// Заливаем Bitmap белым цветом (таким же, как фон PictureBox)
+			g->Clear(paintCanvas->BackColor);
+
+			// Освобождаем Graphics (важно для освобождения ресурсов)
+			delete g;
+
+			// Присваиваем созданное изображение PictureBox
+			paintCanvas->Image = bmp;
+		}
 	}
 private: System::Void alignLeftButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	richTextBox1->SelectionAlignment = HorizontalAlignment::Left;
@@ -1545,11 +1742,11 @@ private: System::Void EQUALSbutton_Click(System::Object^ sender, System::EventAr
 		Object^ result = table->Compute(expression, "");
 		String^ resultStr = result->ToString()->Replace(".", ",");
 
-		// Добавляем в историю
+		// Добавить в историю
 		String^ historyEntry = txtOutput->Text + " = " + resultStr;
 		lstHistory->Items->Add(historyEntry);
 
-		// Показываем результат
+		// Показать результат
 		txtOutput->Text = resultStr;
 	}
 	catch (Exception^ ex) {
@@ -1557,7 +1754,7 @@ private: System::Void EQUALSbutton_Click(System::Object^ sender, System::EventAr
 	}
 }
 
-	   // Вспомогательный метод для проверки последнего символа
+	   
 private: bool IsLastCharOperator() {
 	if (txtOutput->Text->Length == 0) return false;
 	wchar_t last = txtOutput->Text[txtOutput->Text->Length - 1];
@@ -1862,9 +2059,7 @@ private: System::Void toolStripButton1_Click(System::Object^ sender, System::Eve
 }
 
 
-private: System::Void btnClearHistory_Click(System::Object^ sender, System::EventArgs^ e) {
-	lstHistory->Items->Clear();
-}
+
 private: System::Void lstHistory_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (lstHistory->SelectedItem != nullptr) {
 		String^ selected = lstHistory->SelectedItem->ToString();
@@ -1881,7 +2076,31 @@ private: System::Void tabPage3_Click(System::Object^ sender, System::EventArgs^ 
 
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void btnSaveHistory_Click(System::Object^ sender, System::EventArgs^ e) {
+
+
+private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+	System::Windows::Forms::DialogResult res = MessageBox::Show(
+		"Сохранить историю калькулятора?",
+		"Подтверждение закрытия",
+		MessageBoxButtons::YesNoCancel,
+		MessageBoxIcon::Question);
+
+	if (res == System::Windows::Forms::DialogResult::Yes) {
+
+		btnSaveHistory2_Click(sender, e);
+	}
+	else if (res == System::Windows::Forms::DialogResult::Cancel) {
+
+		e->Cancel = true;
+	}
+
+}
+private: System::Void tabPage3_Click_1(System::Object^ sender, System::EventArgs^ e) {
+}
+
+private: System::Void файлToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void btnSaveHistory2_Click(System::Object^ sender, System::EventArgs^ e) {
 	SaveFileDialog^ saveFileDialog = gcnew SaveFileDialog();
 	saveFileDialog->Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
 	saveFileDialog->DefaultExt = "txt";
@@ -1904,7 +2123,10 @@ private: System::Void btnSaveHistory_Click(System::Object^ sender, System::Event
 		}
 	}
 }
-private: System::Void btnOpenHistory_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void btnClearHistory2_Click(System::Object^ sender, System::EventArgs^ e) {
+	lstHistory->Items->Clear();
+}
+private: System::Void btnOpenHistory2_Click(System::Object^ sender, System::EventArgs^ e) {
 	OpenFileDialog^ openFileDialog = gcnew OpenFileDialog();
 	openFileDialog->Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
 	openFileDialog->Title = "Загрузить историю";
@@ -1929,22 +2151,100 @@ private: System::Void btnOpenHistory_Click(System::Object^ sender, System::Event
 		}
 	}
 }
-private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-	System::Windows::Forms::DialogResult res = MessageBox::Show(
-		"Сохранить историю калькулятора?",
-		"Подтверждение закрытия",
-		MessageBoxButtons::YesNoCancel,
-		MessageBoxIcon::Question);
+private: System::Void btnOpenHistory_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 
-	if (res == System::Windows::Forms::DialogResult::Yes) {
 
-		btnSaveHistory_Click(sender, e);
+private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isErasing = false;
+	toolStripStatusLabel1->Text = "Инструмент: Кисть";
+}
+private: System::Void eraserButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isErasing = false;
+	toolStripStatusLabel1->Text = "Инструмент: Кисть";
+
+}
+private: System::Void colorButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
+	ColorDialog^ colorDialog = gcnew ColorDialog();
+	colorDialog->Color = currentColor;
+	if (colorDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		currentColor = colorDialog->Color;
+		toolStripStatusLabel1->Text = "Цвет кисти изменён";
 	}
-	else if (res == System::Windows::Forms::DialogResult::Cancel) {
+}
 
-		e->Cancel = true;
+private: System::Void clearButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (paintCanvas->Image != nullptr) {
+		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
+		g->Clear(paintCanvas->BackColor);
+		delete g;
+		paintCanvas->Invalidate();
+		toolStripStatusLabel1->Text = "Холст очищен";
 	}
-
+}
+private: System::Void saveImageButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (paintCanvas->Image == nullptr) {
+		MessageBox::Show("Нечего сохранять.", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		return;
+	}
+	SaveFileDialog^ saveDialog = gcnew SaveFileDialog();
+	saveDialog->Filter = "PNG Image|*.png|JPEG Image|*.jpg|BMP Image|*.bmp";
+	saveDialog->DefaultExt = "png";
+	if (saveDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		try {
+			paintCanvas->Image->Save(saveDialog->FileName);
+			toolStripStatusLabel1->Text = "Сохранено: " + System::IO::Path::GetFileName(saveDialog->FileName);
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Ошибка сохранения: " + ex->Message);
+		}
+	}
+}
+private: System::Void loadImageButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
+	OpenFileDialog^ openDialog = gcnew OpenFileDialog();
+	openDialog->Filter = "Изображения|*.bmp;*.jpg;*.png;*.gif|Все файлы|*.*";
+	if (openDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		try {
+			Image^ newImage = Image::FromFile(openDialog->FileName);
+			if (paintCanvas->Image != nullptr) delete paintCanvas->Image;
+			Bitmap^ bmp = gcnew Bitmap(paintCanvas->Width, paintCanvas->Height);
+			Graphics^ g = Graphics::FromImage(bmp);
+			g->DrawImage(newImage, 0, 0, paintCanvas->Width, paintCanvas->Height);
+			delete g;
+			delete newImage;
+			paintCanvas->Image = bmp;
+			toolStripStatusLabel1->Text = "Изображение загружено";
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show("Ошибка загрузки: " + ex->Message);
+		}
+	}
+}
+private: System::Void thicknessComboBox_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (thicknessComboBox->SelectedItem != nullptr) {
+		penThickness = Convert::ToInt32(thicknessComboBox->SelectedItem);
+		toolStripStatusLabel1->Text = "Толщина: " + penThickness;
+	}
+}
+private: System::Void paintCanvas_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	isDrawing = true;
+	lastPoint = e->Location;
+}
+private: System::Void paintCanvas_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	if (isDrawing) {
+		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
+		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
+		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
+		pen->EndCap = System::Drawing::Drawing2D::LineCap::Round;
+		g->DrawLine(pen, lastPoint, e->Location);
+		delete pen;
+		delete g;
+		lastPoint = e->Location;
+		paintCanvas->Invalidate();
+	}
+}
+private: System::Void paintCanvas_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	isDrawing = false;
 }
 };
 }
