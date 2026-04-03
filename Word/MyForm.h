@@ -16,7 +16,7 @@ namespace Word {
 		MyForm(void)
 		{
 			InitializeComponent();
-
+			isCalculatorUsed = false;
 			InitializeStatusStrip();
 
 			richTextBox1->SelectionChanged += gcnew System::EventHandler(this, &MyForm::UpdateStatusBar);
@@ -71,6 +71,8 @@ namespace Word {
 		int penThickness;
 		bool isErasing;
 		String^ currentFileName;
+		// Флаг для отслеживания использования калькулятора
+		bool isCalculatorUsed;
 	private: System::Windows::Forms::TabPage^ tabPage4;
 	private: System::Windows::Forms::Label^ lblResult;
 	private: System::Windows::Forms::Button^ btnCheckAnswers;
@@ -1745,6 +1747,7 @@ private: System::Void EQUALSbutton_Click(System::Object^ sender, System::EventAr
 		// Добавить в историю
 		String^ historyEntry = txtOutput->Text + " = " + resultStr;
 		lstHistory->Items->Add(historyEntry);
+		isCalculatorUsed = true;
 
 		// Показать результат
 		txtOutput->Text = resultStr;
@@ -2079,21 +2082,45 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 
 
 private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-	System::Windows::Forms::DialogResult res = MessageBox::Show(
-		"Сохранить историю калькулятора?",
-		"Подтверждение закрытия",
-		MessageBoxButtons::YesNoCancel,
-		MessageBoxIcon::Question);
+	if (isCalculatorUsed && lstHistory->Items->Count > 0) {
+		System::Windows::Forms::DialogResult res = MessageBox::Show(
+			"Сохранить историю калькулятора?",
+			"Подтверждение закрытия",
+			MessageBoxButtons::YesNoCancel,
+			MessageBoxIcon::Question);
 
-	if (res == System::Windows::Forms::DialogResult::Yes) {
+		if (res == System::Windows::Forms::DialogResult::Yes) {
+			// Получаем путь к папке программы
+			String^ appPath = Application::StartupPath;
+			String^ fullPath = appPath + "\\calc_history.txt";
 
-		btnSaveHistory2_Click(sender, e);
+			// Показываем путь (для отладки)
+			MessageBox::Show("Сохраняем в: " + fullPath);
+
+			try {
+				// Проверяем, существует ли папка
+				if (!System::IO::Directory::Exists(appPath)) {
+					MessageBox::Show("Папка не существует: " + appPath);
+					return;
+				}
+
+				// Сохраняем файл
+				System::IO::StreamWriter^ writer = gcnew System::IO::StreamWriter(fullPath);
+				for (int i = 0; i < lstHistory->Items->Count; i++) {
+					writer->WriteLine(lstHistory->Items[i]->ToString());
+				}
+				writer->Close();
+
+				MessageBox::Show("Файл успешно сохранён!\n" + fullPath);
+			}
+			catch (Exception^ ex) {
+				MessageBox::Show("Ошибка сохранения: " + ex->Message);
+			}
+		}
+		else if (res == System::Windows::Forms::DialogResult::Cancel) {
+			e->Cancel = true;
+		}
 	}
-	else if (res == System::Windows::Forms::DialogResult::Cancel) {
-
-		e->Cancel = true;
-	}
-
 }
 private: System::Void tabPage3_Click_1(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -2160,8 +2187,8 @@ private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^
 	toolStripStatusLabel1->Text = "Инструмент: Кисть";
 }
 private: System::Void eraserButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	isErasing = false;
-	toolStripStatusLabel1->Text = "Инструмент: Кисть";
+	isErasing = true;
+	toolStripStatusLabel1->Text = "Инструмент: Ластик";
 
 }
 private: System::Void colorButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -2187,9 +2214,11 @@ private: System::Void saveImageButton_Click(System::Object^ sender, System::Even
 		MessageBox::Show("Нечего сохранять.", "Внимание", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		return;
 	}
+	
 	SaveFileDialog^ saveDialog = gcnew SaveFileDialog();
 	saveDialog->Filter = "PNG Image|*.png|JPEG Image|*.jpg|BMP Image|*.bmp";
 	saveDialog->DefaultExt = "png";
+	saveDialog->FileName = "Picher.txt";
 	if (saveDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		try {
 			paintCanvas->Image->Save(saveDialog->FileName);
