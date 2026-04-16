@@ -16,6 +16,14 @@ namespace Word {
 		MyForm(void)
 		{
 			InitializeComponent();
+			// Инициализация режимов рисования
+			isDrawing = false;
+			isDrawingLine = false;
+			isLineMode = false;
+			currentColor = Color::Black;
+			penThickness = 3;
+			isErasing = false;
+
 			isCalculatorUsed = false;
 			InitializeStatusStrip();
 
@@ -71,6 +79,10 @@ namespace Word {
 		int penThickness;
 		bool isErasing;
 		String^ currentFileName;
+		// Для рисования отрезков
+		bool isDrawingLine;      
+		Point lineStartPoint;    
+		bool isLineMode;        
 		// Флаг для отслеживания использования калькулятора
 		bool isCalculatorUsed;
 	private: System::Windows::Forms::TabPage^ tabPage4;
@@ -159,6 +171,7 @@ private: System::Windows::Forms::ToolStripButton^ clearButtonPaint;
 private: System::Windows::Forms::ToolStripButton^ saveImageButton;
 private: System::Windows::Forms::ToolStripButton^ loadImageButtonPaint;
 private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
+private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 
 
 		System::ComponentModel::IContainer^ components;
@@ -242,6 +255,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->paintCanvas = (gcnew System::Windows::Forms::PictureBox());
 			this->toolStrip2 = (gcnew System::Windows::Forms::ToolStrip());
 			this->penButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->lineSegmentButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->eraserButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->colorButtonPaint = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripSeparator4 = (gcnew System::Windows::Forms::ToolStripSeparator());
@@ -448,14 +462,14 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->tabPage2->Location = System::Drawing::Point(4, 22);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(997, 686);
+			this->tabPage2->Size = System::Drawing::Size(997, 590);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"Word";
 			this->tabPage2->UseVisualStyleBackColor = true;
 			// 
 			// statusStrip2
 			// 
-			this->statusStrip2->Location = System::Drawing::Point(3, 639);
+			this->statusStrip2->Location = System::Drawing::Point(3, 543);
 			this->statusStrip2->Name = L"statusStrip2";
 			this->statusStrip2->Size = System::Drawing::Size(991, 22);
 			this->statusStrip2->TabIndex = 3;
@@ -660,7 +674,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			// 
 			// statusStrip1
 			// 
-			this->statusStrip1->Location = System::Drawing::Point(3, 661);
+			this->statusStrip1->Location = System::Drawing::Point(3, 565);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(991, 22);
 			this->statusStrip1->TabIndex = 1;
@@ -670,7 +684,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			// 
 			this->richTextBox1->Location = System::Drawing::Point(7, 37);
 			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(1014, 624);
+			this->richTextBox1->Size = System::Drawing::Size(1014, 503);
 			this->richTextBox1->TabIndex = 0;
 			this->richTextBox1->Text = L"";
 			this->richTextBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::richTextBox1_TextChanged);
@@ -703,7 +717,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->tabPage1->Location = System::Drawing::Point(4, 22);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(997, 686);
+			this->tabPage1->Size = System::Drawing::Size(997, 590);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Калькулятор";
 			// 
@@ -1100,21 +1114,21 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			// btnSaveHistory2
 			// 
 			this->btnSaveHistory2->Name = L"btnSaveHistory2";
-			this->btnSaveHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnSaveHistory2->Size = System::Drawing::Size(180, 22);
 			this->btnSaveHistory2->Text = L"Сохранить";
 			this->btnSaveHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory2_Click);
 			// 
 			// btnClearHistory2
 			// 
 			this->btnClearHistory2->Name = L"btnClearHistory2";
-			this->btnClearHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnClearHistory2->Size = System::Drawing::Size(180, 22);
 			this->btnClearHistory2->Text = L"Очистить";
 			this->btnClearHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory2_Click);
 			// 
 			// btnOpenHistory2
 			// 
 			this->btnOpenHistory2->Name = L"btnOpenHistory2";
-			this->btnOpenHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnOpenHistory2->Size = System::Drawing::Size(180, 22);
 			this->btnOpenHistory2->Text = L"Открыть";
 			this->btnOpenHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory2_Click);
 			// 
@@ -1127,7 +1141,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->tabControl1->Location = System::Drawing::Point(1, 2);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(1005, 712);
+			this->tabControl1->Size = System::Drawing::Size(1005, 616);
 			this->tabControl1->TabIndex = 0;
 			// 
 			// tabPage3
@@ -1137,7 +1151,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->tabPage3->Location = System::Drawing::Point(4, 22);
 			this->tabPage3->Name = L"tabPage3";
 			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage3->Size = System::Drawing::Size(997, 686);
+			this->tabPage3->Size = System::Drawing::Size(997, 590);
 			this->tabPage3->TabIndex = 4;
 			this->tabPage3->Text = L"Paint";
 			this->tabPage3->UseVisualStyleBackColor = true;
@@ -1151,7 +1165,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->paintCanvas->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->paintCanvas->Location = System::Drawing::Point(3, 28);
 			this->paintCanvas->Name = L"paintCanvas";
-			this->paintCanvas->Size = System::Drawing::Size(991, 655);
+			this->paintCanvas->Size = System::Drawing::Size(991, 559);
 			this->paintCanvas->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->paintCanvas->TabIndex = 1;
 			this->paintCanvas->TabStop = false;
@@ -1161,9 +1175,9 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			// 
 			// toolStrip2
 			// 
-			this->toolStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(8) {
-				this->penButton, this->eraserButton,
-					this->colorButtonPaint, this->toolStripSeparator4, this->clearButtonPaint, this->saveImageButton, this->loadImageButtonPaint,
+			this->toolStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(9) {
+				this->penButton, this->lineSegmentButton,
+					this->eraserButton, this->colorButtonPaint, this->toolStripSeparator4, this->clearButtonPaint, this->saveImageButton, this->loadImageButtonPaint,
 					this->thicknessComboBox
 			});
 			this->toolStrip2->Location = System::Drawing::Point(3, 3);
@@ -1181,6 +1195,17 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			this->penButton->Size = System::Drawing::Size(23, 22);
 			this->penButton->Text = L"Карандаш";
 			this->penButton->Click += gcnew System::EventHandler(this, &MyForm::penButton_Click);
+			// 
+			// lineSegmentButton
+			// 
+			this->lineSegmentButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->lineSegmentButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"lineSegmentButton.Image")));
+			this->lineSegmentButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->lineSegmentButton->Name = L"lineSegmentButton";
+			this->lineSegmentButton->Size = System::Drawing::Size(23, 22);
+			this->lineSegmentButton->Text = L"Отрезок";
+			this->lineSegmentButton->ToolTipText = L"Рисование отрезков";
+			this->lineSegmentButton->Click += gcnew System::EventHandler(this, &MyForm::lineSegmentButton_Click);
 			// 
 			// eraserButton
 			// 
@@ -1253,7 +1278,7 @@ private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1029, 630);
+			this->ClientSize = System::Drawing::Size(1029, 718);
 			this->Controls->Add(this->tabControl1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
@@ -1931,7 +1956,7 @@ private: System::Void btnCheckAnswers_Click(System::Object^ sender, System::Even
 		}
 	}
 
-	result += "\n===== ОБЩАЯ РЕКОМЕНДАЦИЯ =====\n";
+	result += "\n----- ОБЩАЯ РЕКОМЕНДАЦИЯ -----\n";
 
 	// Общая рекомендация на основе возраста и стажа
 	if (age < 30 && experience < 3) {
@@ -2090,15 +2115,15 @@ private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows
 			MessageBoxIcon::Question);
 
 		if (res == System::Windows::Forms::DialogResult::Yes) {
-			// Получаем путь к папке программы
+			// путь к папке программы
 			String^ appPath = Application::StartupPath;
 			String^ fullPath = appPath + "\\calc_history.txt";
 
-			// Показываем путь (для отладки)
+			// Показываем путь 
 			MessageBox::Show("Сохраняем в: " + fullPath);
 
 			try {
-				// Проверяем, существует ли папка
+				
 				if (!System::IO::Directory::Exists(appPath)) {
 					MessageBox::Show("Папка не существует: " + appPath);
 					return;
@@ -2183,13 +2208,15 @@ private: System::Void btnOpenHistory_Click(System::Object^ sender, System::Event
 
 
 private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isLineMode = false;
 	isErasing = false;
 	toolStripStatusLabel1->Text = "Инструмент: Кисть";
 }
+
 private: System::Void eraserButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isLineMode = false;
 	isErasing = true;
 	toolStripStatusLabel1->Text = "Инструмент: Ластик";
-
 }
 private: System::Void colorButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
 	ColorDialog^ colorDialog = gcnew ColorDialog();
@@ -2256,11 +2283,37 @@ private: System::Void thicknessComboBox_SelectedIndexChanged(System::Object^ sen
 	}
 }
 private: System::Void paintCanvas_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	isDrawing = true;
-	lastPoint = e->Location;
+	if (isLineMode) {
+		// Режим отрезков
+		isDrawingLine = true;
+		lineStartPoint = e->Location;
+	}
+	else {
+		// Обычное рисование
+		isDrawing = true;
+		lastPoint = e->Location;
+	}
 }
 private: System::Void paintCanvas_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	if (isDrawing) {
+	if (isLineMode && isDrawingLine) {
+		// В режиме отрезков предпросмотр 
+		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
+		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
+		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
+		pen->EndCap = System::Drawing::Drawing2D::LineCap::Round;
+
+		paintCanvas->Invalidate();
+		paintCanvas->Update();
+
+		// временная линия
+		Graphics^ g2 = paintCanvas->CreateGraphics();
+		g2->DrawLine(pen, lineStartPoint, e->Location);
+		delete g2;
+		delete pen;
+		delete g;
+	}
+	else if (!isLineMode && isDrawing) {
+		// Обычное рисование
 		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
 		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
 		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
@@ -2273,7 +2326,27 @@ private: System::Void paintCanvas_MouseMove(System::Object^ sender, System::Wind
 	}
 }
 private: System::Void paintCanvas_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	isDrawing = false;
+	if (isLineMode && isDrawingLine) {
+		// окончательный отрезок
+		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
+		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
+		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
+		pen->EndCap = System::Drawing::Drawing2D::LineCap::Round;
+		g->DrawLine(pen, lineStartPoint, e->Location);
+		delete pen;
+		delete g;
+		paintCanvas->Invalidate();
+
+		isDrawingLine = false;
+	}
+	else if (!isLineMode) {
+		isDrawing = false;
+	}
+}
+private: System::Void lineSegmentButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isLineMode = true;
+	isErasing = false;
+	toolStripStatusLabel1->Text = "Инструмент: Отрезок (линия)";
 }
 };
 }
