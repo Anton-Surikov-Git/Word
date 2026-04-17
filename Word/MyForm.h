@@ -71,6 +71,10 @@ namespace Word {
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel2;
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel3;
 
+		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel12;
+		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel22;
+		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel32;
+
 		bool isModified;
 		// Переменные для Paint
 		bool isDrawing;
@@ -102,7 +106,7 @@ namespace Word {
 	private: System::Windows::Forms::NumericUpDown^ numAge;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::TabPage^ tabPage2;
-	private: System::Windows::Forms::StatusStrip^ statusStrip2;
+
 	private: System::Windows::Forms::ToolStrip^ toolStrip1;
 	private: System::Windows::Forms::ToolStripButton^ createToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripButton^ openToolStripButton;
@@ -172,6 +176,8 @@ private: System::Windows::Forms::ToolStripButton^ saveImageButton;
 private: System::Windows::Forms::ToolStripButton^ loadImageButtonPaint;
 private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
+private: System::Windows::Forms::StatusStrip^ statusStrip2;
+
 
 
 		System::ComponentModel::IContainer^ components;
@@ -199,7 +205,6 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->numAge = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->tabPage2 = (gcnew System::Windows::Forms::TabPage());
-			this->statusStrip2 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStrip1 = (gcnew System::Windows::Forms::ToolStrip());
 			this->createToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripButton());
 			this->openToolStripButton = (gcnew System::Windows::Forms::ToolStripButton());
@@ -252,6 +257,7 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->btnOpenHistory2 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage3 = (gcnew System::Windows::Forms::TabPage());
+			this->statusStrip2 = (gcnew System::Windows::Forms::StatusStrip());
 			this->paintCanvas = (gcnew System::Windows::Forms::PictureBox());
 			this->toolStrip2 = (gcnew System::Windows::Forms::ToolStrip());
 			this->penButton = (gcnew System::Windows::Forms::ToolStripButton());
@@ -290,7 +296,7 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->tabPage4->Location = System::Drawing::Point(4, 22);
 			this->tabPage4->Name = L"tabPage4";
 			this->tabPage4->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage4->Size = System::Drawing::Size(997, 686);
+			this->tabPage4->Size = System::Drawing::Size(997, 689);
 			this->tabPage4->TabIndex = 3;
 			this->tabPage4->Text = L"Опрос";
 			this->tabPage4->UseVisualStyleBackColor = true;
@@ -455,25 +461,16 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			// 
 			// tabPage2
 			// 
-			this->tabPage2->Controls->Add(this->statusStrip2);
 			this->tabPage2->Controls->Add(this->toolStrip1);
 			this->tabPage2->Controls->Add(this->statusStrip1);
 			this->tabPage2->Controls->Add(this->richTextBox1);
 			this->tabPage2->Location = System::Drawing::Point(4, 22);
 			this->tabPage2->Name = L"tabPage2";
 			this->tabPage2->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage2->Size = System::Drawing::Size(997, 590);
+			this->tabPage2->Size = System::Drawing::Size(997, 689);
 			this->tabPage2->TabIndex = 1;
 			this->tabPage2->Text = L"Word";
 			this->tabPage2->UseVisualStyleBackColor = true;
-			// 
-			// statusStrip2
-			// 
-			this->statusStrip2->Location = System::Drawing::Point(3, 543);
-			this->statusStrip2->Name = L"statusStrip2";
-			this->statusStrip2->Size = System::Drawing::Size(991, 22);
-			this->statusStrip2->TabIndex = 3;
-			this->statusStrip2->Text = L"statusStrip2";
 			// 
 			// toolStrip1
 			// 
@@ -674,17 +671,18 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			// 
 			// statusStrip1
 			// 
-			this->statusStrip1->Location = System::Drawing::Point(3, 565);
+			this->statusStrip1->Location = System::Drawing::Point(3, 664);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(991, 22);
 			this->statusStrip1->TabIndex = 1;
 			this->statusStrip1->Text = L"statusStrip1";
+			this->statusStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::statusStrip1_ItemClicked);
 			// 
 			// richTextBox1
 			// 
 			this->richTextBox1->Location = System::Drawing::Point(7, 37);
 			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(1014, 503);
+			this->richTextBox1->Size = System::Drawing::Size(1014, 624);
 			this->richTextBox1->TabIndex = 0;
 			this->richTextBox1->Text = L"";
 			this->richTextBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::richTextBox1_TextChanged);
@@ -717,7 +715,7 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->tabPage1->Location = System::Drawing::Point(4, 22);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(997, 590);
+			this->tabPage1->Size = System::Drawing::Size(997, 689);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Калькулятор";
 			// 
@@ -1114,21 +1112,21 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			// btnSaveHistory2
 			// 
 			this->btnSaveHistory2->Name = L"btnSaveHistory2";
-			this->btnSaveHistory2->Size = System::Drawing::Size(180, 22);
+			this->btnSaveHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnSaveHistory2->Text = L"Сохранить";
 			this->btnSaveHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory2_Click);
 			// 
 			// btnClearHistory2
 			// 
 			this->btnClearHistory2->Name = L"btnClearHistory2";
-			this->btnClearHistory2->Size = System::Drawing::Size(180, 22);
+			this->btnClearHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnClearHistory2->Text = L"Очистить";
 			this->btnClearHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory2_Click);
 			// 
 			// btnOpenHistory2
 			// 
 			this->btnOpenHistory2->Name = L"btnOpenHistory2";
-			this->btnOpenHistory2->Size = System::Drawing::Size(180, 22);
+			this->btnOpenHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnOpenHistory2->Text = L"Открыть";
 			this->btnOpenHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory2_Click);
 			// 
@@ -1141,21 +1139,30 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->tabControl1->Location = System::Drawing::Point(1, 2);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(1005, 616);
+			this->tabControl1->Size = System::Drawing::Size(1005, 715);
 			this->tabControl1->TabIndex = 0;
 			// 
 			// tabPage3
 			// 
+			this->tabPage3->Controls->Add(this->statusStrip2);
 			this->tabPage3->Controls->Add(this->paintCanvas);
 			this->tabPage3->Controls->Add(this->toolStrip2);
 			this->tabPage3->Location = System::Drawing::Point(4, 22);
 			this->tabPage3->Name = L"tabPage3";
 			this->tabPage3->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage3->Size = System::Drawing::Size(997, 590);
+			this->tabPage3->Size = System::Drawing::Size(997, 689);
 			this->tabPage3->TabIndex = 4;
 			this->tabPage3->Text = L"Paint";
 			this->tabPage3->UseVisualStyleBackColor = true;
 			this->tabPage3->Click += gcnew System::EventHandler(this, &MyForm::tabPage3_Click_1);
+			// 
+			// statusStrip2
+			// 
+			this->statusStrip2->Location = System::Drawing::Point(3, 664);
+			this->statusStrip2->Name = L"statusStrip2";
+			this->statusStrip2->Size = System::Drawing::Size(991, 22);
+			this->statusStrip2->TabIndex = 5;
+			this->statusStrip2->Text = L"statusStrip2";
 			// 
 			// paintCanvas
 			// 
@@ -1165,7 +1172,7 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			this->paintCanvas->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->paintCanvas->Location = System::Drawing::Point(3, 28);
 			this->paintCanvas->Name = L"paintCanvas";
-			this->paintCanvas->Size = System::Drawing::Size(991, 559);
+			this->paintCanvas->Size = System::Drawing::Size(991, 658);
 			this->paintCanvas->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->paintCanvas->TabIndex = 1;
 			this->paintCanvas->TabStop = false;
@@ -1264,15 +1271,16 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			// 
 			// thicknessComboBox
 			// 
-			this->thicknessComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(10) {
+			this->thicknessComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(18) {
 				L"1", L"2", L"3", L"4", L"5", L"6", L"7",
-					L"8", L"9", L"10"
+					L"8", L"9", L"10", L"11", L"12", L"13", L"14", L"15", L"20", L"25", L"30"
 			});
 			this->thicknessComboBox->Name = L"thicknessComboBox";
 			this->thicknessComboBox->Size = System::Drawing::Size(75, 25);
 			this->thicknessComboBox->Text = L"3";
 			this->thicknessComboBox->ToolTipText = L"Толщина кисти";
 			this->thicknessComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::thicknessComboBox_SelectedIndexChanged);
+			this->thicknessComboBox->Click += gcnew System::EventHandler(this, &MyForm::thicknessComboBox_Click);
 			// 
 			// MyForm
 			// 
@@ -1311,6 +1319,8 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 		}
 
 	private:
+
+		//Статус панель для word и paint
 		void InitializeStatusStrip() {
 			toolStripStatusLabel1 = gcnew System::Windows::Forms::ToolStripStatusLabel();
 			toolStripStatusLabel2 = gcnew System::Windows::Forms::ToolStripStatusLabel();
@@ -1329,6 +1339,21 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 			statusStrip1->Items->Add(toolStripStatusLabel1);
 			statusStrip1->Items->Add(toolStripStatusLabel2);
 			statusStrip1->Items->Add(toolStripStatusLabel3);
+
+			//--------------------------------------------------------------------------------
+
+			toolStripStatusLabel12 = gcnew System::Windows::Forms::ToolStripStatusLabel();
+			toolStripStatusLabel22 = gcnew System::Windows::Forms::ToolStripStatusLabel();
+			toolStripStatusLabel32 = gcnew System::Windows::Forms::ToolStripStatusLabel();
+
+			toolStripStatusLabel12->Text = "Готов";
+			toolStripStatusLabel12->Spring = true;
+			toolStripStatusLabel12->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+
+			statusStrip2->Items->Add(toolStripStatusLabel12);
+			statusStrip2->Items->Add(toolStripStatusLabel22);
+			statusStrip2->Items->Add(toolStripStatusLabel32);
+
 		}
 
 		void UpdateStatusBar(System::Object^ sender, System::EventArgs^ e) {
@@ -1566,21 +1591,19 @@ private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 		}
 	}
 	private: System::Void MyForm_Load_1(System::Object^ sender, System::EventArgs^ e) {
-		// Проверяем, есть ли уже изображение в PictureBox
+		
 		if (paintCanvas->Image == nullptr) {
-			// Создаём пустой Bitmap размером с PictureBox
+			
 			System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(paintCanvas->Width, paintCanvas->Height);
 
-			// Создаём объект Graphics для рисования на этом Bitmap
+			
 			System::Drawing::Graphics^ g = System::Drawing::Graphics::FromImage(bmp);
 
-			// Заливаем Bitmap белым цветом (таким же, как фон PictureBox)
 			g->Clear(paintCanvas->BackColor);
 
-			// Освобождаем Graphics (важно для освобождения ресурсов)
+
 			delete g;
 
-			// Присваиваем созданное изображение PictureBox
 			paintCanvas->Image = bmp;
 		}
 	}
@@ -1612,21 +1635,21 @@ private: System::Void insertImageButton_Click(System::Object^ sender, System::Ev
 
 	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		try {
-			// Сохраняем текущее содержимое буфера обмена 
+			
 			System::Windows::Forms::IDataObject^ savedClipboard = Clipboard::GetDataObject();
 
-			// Загружаем изображение из выбранного файла
+			
 			System::Drawing::Image^ image = System::Drawing::Image::FromFile(openFileDialog->FileName);
 
-			// Копируем изображение в буфер обмена
+			
 			Clipboard::SetImage(image);
 
-			// Вставляем изображение
+			
 			richTextBox1->Paste();
 
 			toolStripStatusLabel1->Text = "Изображение вставлено: " + System::IO::Path::GetFileName(openFileDialog->FileName);
 
-			// Восстанавливаем сохраненное содержимое буфера обмена
+			
 			if (savedClipboard != nullptr) {
 				Clipboard::SetDataObject(savedClipboard);
 			}
@@ -1687,17 +1710,17 @@ private: System::Void ZERO_Click(System::Object^ sender, System::EventArgs^ e) {
 	txtOutput->Text += "0";
 }
 
-	   // Точка 
+	   
 private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ text = txtOutput->Text;
 
-	// Если поле пустое, начинаем с "0,"
+
 	if (text->Length == 0) {
 		txtOutput->Text = "0,";
 		return;
 	}
 
-	// Находим позицию последнего оператора
+
 	int lastOperatorPos = -1;
 	array<wchar_t>^ operators = { '+', '-', '*', '/' };
 
@@ -1714,7 +1737,7 @@ private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^
 		lastNumber = text->Substring(lastOperatorPos + 1);
 	}
 	else {
-		lastNumber = text; // всё выражение - одно число
+		lastNumber = text; 
 	}
 
 	// Проверяем, есть ли уже запятая в последнем числе
@@ -1725,7 +1748,7 @@ private: System::Void DOTbutton_Click(System::Object^ sender, System::EventArgs^
 
 	   // Операции
 private: System::Void PLUSbutton_Click(System::Object^ sender, System::EventArgs^ e) {
-	// Добавляем оператор, если последний символ не оператор
+
 	if (!IsLastCharOperator()) {
 		txtOutput->Text += "+";
 	}
@@ -1822,6 +1845,11 @@ private: System::Void btnUpdateQuestions_Click(System::Object^ sender, System::E
 	cmbAnswer1->Items->Clear();
 	cmbAnswer2->Items->Clear();
 
+	if (age < experience) {
+		MessageBox::Show("Ошибка: возраст не может быть меньше опыта", "Опрос", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+
+
 	// Вопрос 1 зависит от возраста
 	if (age < 30) {
 		lblQuestion1->Text = "Как вы оцениваете возможности карьерного роста?";
@@ -1880,7 +1908,7 @@ private: System::Void btnCheckAnswers_Click(System::Object^ sender, System::Even
 	int age = Convert::ToInt32(numAge->Value);
 	int experience = Convert::ToInt32(numExperience->Value);
 
-	String^ result = "===== РЕЗУЛЬТАТЫ ОПРОСА =====\n\n";
+	String^ result = "----- РЕЗУЛЬТАТЫ ОПРОСА -----\n\n";
 	result += "Возраст: " + age + " лет\n";
 	result += "Стаж: " + experience + " лет\n\n";
 
@@ -2210,20 +2238,20 @@ private: System::Void btnOpenHistory_Click(System::Object^ sender, System::Event
 private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = false;
 	isErasing = false;
-	toolStripStatusLabel1->Text = "Инструмент: Кисть";
+	toolStripStatusLabel12->Text = "Инструмент: Кисть";
 }
 
 private: System::Void eraserButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = false;
 	isErasing = true;
-	toolStripStatusLabel1->Text = "Инструмент: Ластик";
+	toolStripStatusLabel12->Text = "Инструмент: Ластик";
 }
 private: System::Void colorButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
 	ColorDialog^ colorDialog = gcnew ColorDialog();
 	colorDialog->Color = currentColor;
 	if (colorDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		currentColor = colorDialog->Color;
-		toolStripStatusLabel1->Text = "Цвет кисти изменён";
+		toolStripStatusLabel12->Text = "Цвет кисти изменён";
 	}
 }
 
@@ -2233,7 +2261,7 @@ private: System::Void clearButtonPaint_Click(System::Object^ sender, System::Eve
 		g->Clear(paintCanvas->BackColor);
 		delete g;
 		paintCanvas->Invalidate();
-		toolStripStatusLabel1->Text = "Холст очищен";
+		toolStripStatusLabel12->Text = "Холст очищен";
 	}
 }
 private: System::Void saveImageButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -2249,7 +2277,7 @@ private: System::Void saveImageButton_Click(System::Object^ sender, System::Even
 	if (saveDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		try {
 			paintCanvas->Image->Save(saveDialog->FileName);
-			toolStripStatusLabel1->Text = "Сохранено: " + System::IO::Path::GetFileName(saveDialog->FileName);
+			toolStripStatusLabel12->Text = "Сохранено: " + System::IO::Path::GetFileName(saveDialog->FileName);
 		}
 		catch (Exception^ ex) {
 			MessageBox::Show("Ошибка сохранения: " + ex->Message);
@@ -2269,7 +2297,7 @@ private: System::Void loadImageButtonPaint_Click(System::Object^ sender, System:
 			delete g;
 			delete newImage;
 			paintCanvas->Image = bmp;
-			toolStripStatusLabel1->Text = "Изображение загружено";
+			toolStripStatusLabel12->Text = "Изображение загружено";
 		}
 		catch (Exception^ ex) {
 			MessageBox::Show("Ошибка загрузки: " + ex->Message);
@@ -2279,7 +2307,7 @@ private: System::Void loadImageButtonPaint_Click(System::Object^ sender, System:
 private: System::Void thicknessComboBox_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 	if (thicknessComboBox->SelectedItem != nullptr) {
 		penThickness = Convert::ToInt32(thicknessComboBox->SelectedItem);
-		toolStripStatusLabel1->Text = "Толщина: " + penThickness;
+		toolStripStatusLabel32->Text = "Толщина: " + penThickness;
 	}
 }
 private: System::Void paintCanvas_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
@@ -2346,7 +2374,13 @@ private: System::Void paintCanvas_MouseUp(System::Object^ sender, System::Window
 private: System::Void lineSegmentButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = true;
 	isErasing = false;
-	toolStripStatusLabel1->Text = "Инструмент: Отрезок (линия)";
+	toolStripStatusLabel12->Text = "Инструмент: Отрезок (линия)";
+}
+private: System::Void thicknessComboBox_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void statusStrip2_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+}
+private: System::Void statusStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
 }
 };
 }
