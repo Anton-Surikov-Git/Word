@@ -24,6 +24,14 @@ namespace Word {
 			penThickness = 3;
 			isErasing = false;
 
+			isShapeMode = false;
+			currentShape = 1;  
+			isDrawingShape = false;
+
+			// выбор фигур
+			rectangleMenuItem->Click += gcnew System::EventHandler(this, &MyForm::rectangleMenuItem_Click);
+			ellipseMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseMenuItem_Click);
+
 			isCalculatorUsed = false;
 			InitializeStatusStrip();
 
@@ -48,25 +56,6 @@ namespace Word {
 	private:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel1;
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel2;
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel3;
@@ -86,7 +75,12 @@ namespace Word {
 		// Для рисования отрезков
 		bool isDrawingLine;      
 		Point lineStartPoint;    
-		bool isLineMode;        
+		bool isLineMode;
+		// Для рисования фигур
+		bool isShapeMode;         
+		int currentShape;          
+		Point shapeStartPoint;    
+		bool isDrawingShape;       
 		// Флаг для отслеживания использования калькулятора
 		bool isCalculatorUsed;
 	private: System::Windows::Forms::TabPage^ tabPage4;
@@ -177,6 +171,9 @@ private: System::Windows::Forms::ToolStripButton^ loadImageButtonPaint;
 private: System::Windows::Forms::ToolStripComboBox^ thicknessComboBox;
 private: System::Windows::Forms::ToolStripButton^ lineSegmentButton;
 private: System::Windows::Forms::StatusStrip^ statusStrip2;
+private: System::Windows::Forms::ToolStripDropDownButton^ shapesDropDownButton;
+private: System::Windows::Forms::ToolStripMenuItem^ rectangleMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 
 
 
@@ -269,6 +266,9 @@ private: System::Windows::Forms::StatusStrip^ statusStrip2;
 			this->saveImageButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->loadImageButtonPaint = (gcnew System::Windows::Forms::ToolStripButton());
 			this->thicknessComboBox = (gcnew System::Windows::Forms::ToolStripComboBox());
+			this->shapesDropDownButton = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+			this->rectangleMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->ellipseMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->tabPage4->SuspendLayout();
 			this->grpQuestion2->SuspendLayout();
 			this->groupBox1->SuspendLayout();
@@ -1182,10 +1182,10 @@ private: System::Windows::Forms::StatusStrip^ statusStrip2;
 			// 
 			// toolStrip2
 			// 
-			this->toolStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(9) {
+			this->toolStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(10) {
 				this->penButton, this->lineSegmentButton,
 					this->eraserButton, this->colorButtonPaint, this->toolStripSeparator4, this->clearButtonPaint, this->saveImageButton, this->loadImageButtonPaint,
-					this->thicknessComboBox
+					this->thicknessComboBox, this->shapesDropDownButton
 			});
 			this->toolStrip2->Location = System::Drawing::Point(3, 3);
 			this->toolStrip2->Name = L"toolStrip2";
@@ -1281,6 +1281,35 @@ private: System::Windows::Forms::StatusStrip^ statusStrip2;
 			this->thicknessComboBox->ToolTipText = L"Толщина кисти";
 			this->thicknessComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::thicknessComboBox_SelectedIndexChanged);
 			this->thicknessComboBox->Click += gcnew System::EventHandler(this, &MyForm::thicknessComboBox_Click);
+			// 
+			// shapesDropDownButton
+			// 
+			this->shapesDropDownButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->shapesDropDownButton->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->rectangleMenuItem,
+					this->ellipseMenuItem
+			});
+			this->shapesDropDownButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"shapesDropDownButton.Image")));
+			this->shapesDropDownButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->shapesDropDownButton->Name = L"shapesDropDownButton";
+			this->shapesDropDownButton->Size = System::Drawing::Size(29, 22);
+			this->shapesDropDownButton->Text = L"Фигуры";
+			this->shapesDropDownButton->ToolTipText = L"Выбор фигуры";
+			this->shapesDropDownButton->Click += gcnew System::EventHandler(this, &MyForm::shapesDropDownButton_Click);
+			// 
+			// rectangleMenuItem
+			// 
+			this->rectangleMenuItem->Name = L"rectangleMenuItem";
+			this->rectangleMenuItem->Size = System::Drawing::Size(180, 22);
+			this->rectangleMenuItem->Text = L"Прямоугольник";
+			this->rectangleMenuItem->Click += gcnew System::EventHandler(this, &MyForm::rectangleMenuItem_Click);
+			// 
+			// ellipseMenuItem
+			// 
+			this->ellipseMenuItem->Name = L"ellipseMenuItem";
+			this->ellipseMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ellipseMenuItem->Text = L"Эллипс";
+			this->ellipseMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseMenuItem_Click);
 			// 
 			// MyForm
 			// 
@@ -2237,14 +2266,16 @@ private: System::Void btnOpenHistory_Click(System::Object^ sender, System::Event
 
 private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = false;
+	isShapeMode = false;
 	isErasing = false;
-	toolStripStatusLabel12->Text = "Инструмент: Кисть";
+	toolStripStatusLabel1->Text = "Инструмент: Кисть";
 }
 
 private: System::Void eraserButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = false;
+	isShapeMode = false;
 	isErasing = true;
-	toolStripStatusLabel12->Text = "Инструмент: Ластик";
+	toolStripStatusLabel1->Text = "Инструмент: Ластик";
 }
 private: System::Void colorButtonPaint_Click(System::Object^ sender, System::EventArgs^ e) {
 	ColorDialog^ colorDialog = gcnew ColorDialog();
@@ -2316,31 +2347,19 @@ private: System::Void paintCanvas_MouseDown(System::Object^ sender, System::Wind
 		isDrawingLine = true;
 		lineStartPoint = e->Location;
 	}
+	else if (isShapeMode) {
+		// Режим фигур 
+		isDrawingShape = true;
+		shapeStartPoint = e->Location;
+	}
 	else {
-		// Обычное рисование
+		// Обычное рисование 
 		isDrawing = true;
 		lastPoint = e->Location;
 	}
 }
 private: System::Void paintCanvas_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	if (isLineMode && isDrawingLine) {
-		// В режиме отрезков предпросмотр 
-		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
-		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
-		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
-		pen->EndCap = System::Drawing::Drawing2D::LineCap::Round;
-
-		paintCanvas->Invalidate();
-		paintCanvas->Update();
-
-		// временная линия
-		Graphics^ g2 = paintCanvas->CreateGraphics();
-		g2->DrawLine(pen, lineStartPoint, e->Location);
-		delete g2;
-		delete pen;
-		delete g;
-	}
-	else if (!isLineMode && isDrawing) {
+	if (!isLineMode && !isShapeMode && isDrawing) {
 		// Обычное рисование
 		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
 		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
@@ -2352,10 +2371,47 @@ private: System::Void paintCanvas_MouseMove(System::Object^ sender, System::Wind
 		lastPoint = e->Location;
 		paintCanvas->Invalidate();
 	}
+
+	if (isLineMode && isDrawingLine) {
+		paintCanvas->Invalidate();
+		paintCanvas->Update();
+
+		Graphics^ g = paintCanvas->CreateGraphics();
+		Pen^ pen = gcnew Pen(currentColor, penThickness);
+		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
+		pen->EndCap = System::Drawing::Drawing2D::LineCap::Round;
+		g->DrawLine(pen, lineStartPoint, e->Location);
+		delete pen;
+		delete g;
+	}
+
+	else if (isShapeMode && isDrawingShape) {
+		// Предпросмотр фигуры 
+		paintCanvas->Invalidate();
+		paintCanvas->Update();
+
+		Graphics^ g = paintCanvas->CreateGraphics();
+		Pen^ pen = gcnew Pen(currentColor, penThickness);
+
+		int x = Math::Min(shapeStartPoint.X, e->Location.X);
+		int y = Math::Min(shapeStartPoint.Y, e->Location.Y);
+		int width = Math::Abs(shapeStartPoint.X - e->Location.X);
+		int height = Math::Abs(shapeStartPoint.Y - e->Location.Y);
+
+		if (currentShape == 1) { 
+			g->DrawRectangle(pen, x, y, width, height);
+		}
+		else if (currentShape == 2) { 
+			g->DrawEllipse(pen, x, y, width, height);
+		}
+
+		delete pen;
+		delete g;
+	}
 }
 private: System::Void paintCanvas_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 	if (isLineMode && isDrawingLine) {
-		// окончательный отрезок
+		// Рисуем отрезок
 		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
 		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
 		pen->StartCap = System::Drawing::Drawing2D::LineCap::Round;
@@ -2364,23 +2420,64 @@ private: System::Void paintCanvas_MouseUp(System::Object^ sender, System::Window
 		delete pen;
 		delete g;
 		paintCanvas->Invalidate();
-
 		isDrawingLine = false;
 	}
-	else if (!isLineMode) {
+	else if (isShapeMode && isDrawingShape) {
+		// Рисуем фигуру
+		Graphics^ g = Graphics::FromImage(paintCanvas->Image);
+		Pen^ pen = gcnew Pen(isErasing ? paintCanvas->BackColor : currentColor, penThickness);
+
+		int x = Math::Min(shapeStartPoint.X, e->Location.X);
+		int y = Math::Min(shapeStartPoint.Y, e->Location.Y);
+		int width = Math::Abs(shapeStartPoint.X - e->Location.X);
+		int height = Math::Abs(shapeStartPoint.Y - e->Location.Y);
+
+		if (currentShape == 1) { 
+			g->DrawRectangle(pen, x, y, width, height);
+		}
+		else if (currentShape == 2) { 
+			g->DrawEllipse(pen, x, y, width, height);
+		}
+
+		delete pen;
+		delete g;
+		paintCanvas->Invalidate();
+		isDrawingShape = false;
+	}
+	else if (!isLineMode && !isShapeMode) {
 		isDrawing = false;
 	}
 }
 private: System::Void lineSegmentButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = true;
+	isShapeMode = false;
 	isErasing = false;
-	toolStripStatusLabel12->Text = "Инструмент: Отрезок (линия)";
+	toolStripStatusLabel1->Text = "Инструмент: Отрезок (линия)";
 }
 private: System::Void thicknessComboBox_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void statusStrip2_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
 }
 private: System::Void statusStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+}
+private: System::Void shapesDropDownButton_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+	   
+private: System::Void rectangleMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	isLineMode = false;
+	isShapeMode = true;
+	currentShape = 1;  
+	isErasing = false;
+	toolStripStatusLabel1->Text = "Фигура: Прямоугольник";
+}
+
+	   
+private: System::Void ellipseMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	isLineMode = false;
+	isShapeMode = true;
+	currentShape = 2;  
+	isErasing = false;
+	toolStripStatusLabel1->Text = "Фигура: Эллипс";
 }
 };
 }
