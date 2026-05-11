@@ -8,6 +8,9 @@ namespace Word {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Xml;
+	using namespace System::Collections::Generic;
+	using namespace System::Text;
 
 
 	public ref class MyForm : public System::Windows::Forms::Form
@@ -16,6 +19,7 @@ namespace Word {
 		MyForm(void)
 		{
 			InitializeComponent();
+			InitExcelGrid();   // настройка таблицы
 			// Инициализация режимов рисования
 			isDrawing = false;
 			isDrawingLine = false;
@@ -63,6 +67,9 @@ namespace Word {
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel12;
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel22;
 		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel32;
+
+		System::Collections::Generic::Dictionary<System::String^, System::String^>^ cellFormulas;
+		System::String^ currentExcelFilePath;
 
 		bool isModified;
 		// Переменные для Paint
@@ -174,6 +181,35 @@ private: System::Windows::Forms::StatusStrip^ statusStrip2;
 private: System::Windows::Forms::ToolStripDropDownButton^ shapesDropDownButton;
 private: System::Windows::Forms::ToolStripMenuItem^ rectangleMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
+private: System::Windows::Forms::TabPage^ tabPageExcel;
+private: System::Windows::Forms::DataGridView^ excelGrid;
+private: System::Windows::Forms::ToolStrip^ formatToolStrip;
+
+private: System::Windows::Forms::ToolStrip^ fileToolStrip;
+private: System::Windows::Forms::ToolStripDropDownButton^ fileDropDown;
+private: System::Windows::Forms::ToolStripMenuItem^ newMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^ openMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^ saveMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^ saveAsMenuItem;
+private: System::Windows::Forms::ToolStripComboBox^ fontComboBox;
+private: System::Windows::Forms::ToolStripComboBox^ fontSizeComboBoxEX;
+private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator5;
+private: System::Windows::Forms::ToolStripButton^ boldButtonEX;
+private: System::Windows::Forms::ToolStripButton^ italicButtonEX;
+private: System::Windows::Forms::ToolStripButton^ underlineButtonEX;
+private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator6;
+private: System::Windows::Forms::ToolStripButton^ alignLeftButtonEX;
+private: System::Windows::Forms::ToolStripButton^ alignCenterButtonEX;
+private: System::Windows::Forms::ToolStripButton^ alignRightButtonEX;
+private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator7;
+private: System::Windows::Forms::ToolStripButton^ alignTopButton;
+private: System::Windows::Forms::ToolStripButton^ alignMiddleButton;
+private: System::Windows::Forms::ToolStripButton^ alignBottomButton;
+private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator8;
+private: System::Windows::Forms::ToolStripButton^ textColorButton;
+private: System::Windows::Forms::ToolStripButton^ backColorButton;
+
+
 
 
 
@@ -269,6 +305,32 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			this->shapesDropDownButton = (gcnew System::Windows::Forms::ToolStripDropDownButton());
 			this->rectangleMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ellipseMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->tabPageExcel = (gcnew System::Windows::Forms::TabPage());
+			this->formatToolStrip = (gcnew System::Windows::Forms::ToolStrip());
+			this->fontComboBox = (gcnew System::Windows::Forms::ToolStripComboBox());
+			this->fontSizeComboBoxEX = (gcnew System::Windows::Forms::ToolStripComboBox());
+			this->toolStripSeparator5 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->boldButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->italicButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->underlineButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripSeparator6 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->alignLeftButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->alignCenterButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->alignRightButtonEX = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripSeparator7 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->alignTopButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->alignMiddleButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->alignBottomButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->toolStripSeparator8 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->textColorButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->backColorButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->fileToolStrip = (gcnew System::Windows::Forms::ToolStrip());
+			this->fileDropDown = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+			this->newMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->openMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveAsMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->excelGrid = (gcnew System::Windows::Forms::DataGridView());
 			this->tabPage4->SuspendLayout();
 			this->grpQuestion2->SuspendLayout();
 			this->groupBox1->SuspendLayout();
@@ -283,6 +345,10 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			this->tabPage3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->paintCanvas))->BeginInit();
 			this->toolStrip2->SuspendLayout();
+			this->tabPageExcel->SuspendLayout();
+			this->formatToolStrip->SuspendLayout();
+			this->fileToolStrip->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->excelGrid))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// tabPage4
@@ -1112,21 +1178,21 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			// btnSaveHistory2
 			// 
 			this->btnSaveHistory2->Name = L"btnSaveHistory2";
-			this->btnSaveHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnSaveHistory2->Size = System::Drawing::Size(132, 22);
 			this->btnSaveHistory2->Text = L"Сохранить";
 			this->btnSaveHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory2_Click);
 			// 
 			// btnClearHistory2
 			// 
 			this->btnClearHistory2->Name = L"btnClearHistory2";
-			this->btnClearHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnClearHistory2->Size = System::Drawing::Size(132, 22);
 			this->btnClearHistory2->Text = L"Очистить";
 			this->btnClearHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory2_Click);
 			// 
 			// btnOpenHistory2
 			// 
 			this->btnOpenHistory2->Name = L"btnOpenHistory2";
-			this->btnOpenHistory2->Size = System::Drawing::Size(133, 22);
+			this->btnOpenHistory2->Size = System::Drawing::Size(132, 22);
 			this->btnOpenHistory2->Text = L"Открыть";
 			this->btnOpenHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory2_Click);
 			// 
@@ -1136,6 +1202,7 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			this->tabControl1->Controls->Add(this->tabPage2);
 			this->tabControl1->Controls->Add(this->tabPage4);
 			this->tabControl1->Controls->Add(this->tabPage3);
+			this->tabControl1->Controls->Add(this->tabPageExcel);
 			this->tabControl1->Location = System::Drawing::Point(1, 2);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
@@ -1300,16 +1367,258 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			// rectangleMenuItem
 			// 
 			this->rectangleMenuItem->Name = L"rectangleMenuItem";
-			this->rectangleMenuItem->Size = System::Drawing::Size(180, 22);
+			this->rectangleMenuItem->Size = System::Drawing::Size(163, 22);
 			this->rectangleMenuItem->Text = L"Прямоугольник";
 			this->rectangleMenuItem->Click += gcnew System::EventHandler(this, &MyForm::rectangleMenuItem_Click);
 			// 
 			// ellipseMenuItem
 			// 
 			this->ellipseMenuItem->Name = L"ellipseMenuItem";
-			this->ellipseMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ellipseMenuItem->Size = System::Drawing::Size(163, 22);
 			this->ellipseMenuItem->Text = L"Эллипс";
 			this->ellipseMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseMenuItem_Click);
+			// 
+			// tabPageExcel
+			// 
+			this->tabPageExcel->Controls->Add(this->formatToolStrip);
+			this->tabPageExcel->Controls->Add(this->fileToolStrip);
+			this->tabPageExcel->Controls->Add(this->excelGrid);
+			this->tabPageExcel->Location = System::Drawing::Point(4, 22);
+			this->tabPageExcel->Name = L"tabPageExcel";
+			this->tabPageExcel->Padding = System::Windows::Forms::Padding(3);
+			this->tabPageExcel->Size = System::Drawing::Size(997, 689);
+			this->tabPageExcel->TabIndex = 5;
+			this->tabPageExcel->Text = L"EX";
+			this->tabPageExcel->UseVisualStyleBackColor = true;
+			// 
+			// formatToolStrip
+			// 
+			this->formatToolStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(17) {
+				this->fontComboBox,
+					this->fontSizeComboBoxEX, this->toolStripSeparator5, this->boldButtonEX, this->italicButtonEX, this->underlineButtonEX, this->toolStripSeparator6,
+					this->alignLeftButtonEX, this->alignCenterButtonEX, this->alignRightButtonEX, this->toolStripSeparator7, this->alignTopButton,
+					this->alignMiddleButton, this->alignBottomButton, this->toolStripSeparator8, this->textColorButton, this->backColorButton
+			});
+			this->formatToolStrip->Location = System::Drawing::Point(3, 28);
+			this->formatToolStrip->Name = L"formatToolStrip";
+			this->formatToolStrip->Size = System::Drawing::Size(991, 25);
+			this->formatToolStrip->TabIndex = 2;
+			this->formatToolStrip->Text = L"toolStrip3";
+			this->formatToolStrip->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::formatToolStrip_ItemClicked);
+			// 
+			// fontComboBox
+			// 
+			this->fontComboBox->Name = L"fontComboBox";
+			this->fontComboBox->Size = System::Drawing::Size(121, 25);
+			this->fontComboBox->Text = L"шрифт";
+			this->fontComboBox->Click += gcnew System::EventHandler(this, &MyForm::fontComboBox_Click);
+			// 
+			// fontSizeComboBoxEX
+			// 
+			this->fontSizeComboBoxEX->Items->AddRange(gcnew cli::array< System::Object^  >(15) {
+				L"8", L"9", L"10", L"11", L"12", L"14",
+					L"16", L"18", L"20", L"22", L"24", L"26", L"28", L"36", L"48"
+			});
+			this->fontSizeComboBoxEX->Name = L"fontSizeComboBoxEX";
+			this->fontSizeComboBoxEX->Size = System::Drawing::Size(121, 25);
+			this->fontSizeComboBoxEX->Text = L"размер";
+			this->fontSizeComboBoxEX->Click += gcnew System::EventHandler(this, &MyForm::fontSizeComboBoxEX_Click);
+			// 
+			// toolStripSeparator5
+			// 
+			this->toolStripSeparator5->Name = L"toolStripSeparator5";
+			this->toolStripSeparator5->Size = System::Drawing::Size(6, 25);
+			// 
+			// boldButtonEX
+			// 
+			this->boldButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->boldButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"boldButtonEX.Image")));
+			this->boldButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->boldButtonEX->Name = L"boldButtonEX";
+			this->boldButtonEX->Size = System::Drawing::Size(23, 22);
+			this->boldButtonEX->Text = L"жирный";
+			this->boldButtonEX->Click += gcnew System::EventHandler(this, &MyForm::boldButtonEX_Click);
+			// 
+			// italicButtonEX
+			// 
+			this->italicButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->italicButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"italicButtonEX.Image")));
+			this->italicButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->italicButtonEX->Name = L"italicButtonEX";
+			this->italicButtonEX->Size = System::Drawing::Size(23, 22);
+			this->italicButtonEX->Text = L"курсив";
+			this->italicButtonEX->Click += gcnew System::EventHandler(this, &MyForm::italicButtonEX_Click);
+			// 
+			// underlineButtonEX
+			// 
+			this->underlineButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->underlineButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"underlineButtonEX.Image")));
+			this->underlineButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->underlineButtonEX->Name = L"underlineButtonEX";
+			this->underlineButtonEX->Size = System::Drawing::Size(23, 22);
+			this->underlineButtonEX->Text = L"подчёркнутый";
+			this->underlineButtonEX->Click += gcnew System::EventHandler(this, &MyForm::underlineButtonEX_Click);
+			// 
+			// toolStripSeparator6
+			// 
+			this->toolStripSeparator6->Name = L"toolStripSeparator6";
+			this->toolStripSeparator6->Size = System::Drawing::Size(6, 25);
+			// 
+			// alignLeftButtonEX
+			// 
+			this->alignLeftButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignLeftButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignLeftButtonEX.Image")));
+			this->alignLeftButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignLeftButtonEX->Name = L"alignLeftButtonEX";
+			this->alignLeftButtonEX->Size = System::Drawing::Size(23, 22);
+			this->alignLeftButtonEX->Text = L"по левому краю";
+			this->alignLeftButtonEX->Click += gcnew System::EventHandler(this, &MyForm::alignLeftButtonEX_Click);
+			// 
+			// alignCenterButtonEX
+			// 
+			this->alignCenterButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignCenterButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignCenterButtonEX.Image")));
+			this->alignCenterButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignCenterButtonEX->Name = L"alignCenterButtonEX";
+			this->alignCenterButtonEX->Size = System::Drawing::Size(23, 22);
+			this->alignCenterButtonEX->Text = L"по центру";
+			this->alignCenterButtonEX->Click += gcnew System::EventHandler(this, &MyForm::alignCenterButtonEX_Click);
+			// 
+			// alignRightButtonEX
+			// 
+			this->alignRightButtonEX->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignRightButtonEX->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignRightButtonEX.Image")));
+			this->alignRightButtonEX->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignRightButtonEX->Name = L"alignRightButtonEX";
+			this->alignRightButtonEX->Size = System::Drawing::Size(23, 22);
+			this->alignRightButtonEX->Text = L"по правому краю";
+			this->alignRightButtonEX->Click += gcnew System::EventHandler(this, &MyForm::alignRightButtonEX_Click);
+			// 
+			// toolStripSeparator7
+			// 
+			this->toolStripSeparator7->Name = L"toolStripSeparator7";
+			this->toolStripSeparator7->Size = System::Drawing::Size(6, 25);
+			// 
+			// alignTopButton
+			// 
+			this->alignTopButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignTopButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignTopButton.Image")));
+			this->alignTopButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignTopButton->Name = L"alignTopButton";
+			this->alignTopButton->Size = System::Drawing::Size(23, 22);
+			this->alignTopButton->Text = L"по верхнему краю";
+			this->alignTopButton->Click += gcnew System::EventHandler(this, &MyForm::alignTopButton_Click);
+			// 
+			// alignMiddleButton
+			// 
+			this->alignMiddleButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignMiddleButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignMiddleButton.Image")));
+			this->alignMiddleButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignMiddleButton->Name = L"alignMiddleButton";
+			this->alignMiddleButton->Size = System::Drawing::Size(23, 22);
+			this->alignMiddleButton->Text = L"по середине";
+			this->alignMiddleButton->Click += gcnew System::EventHandler(this, &MyForm::alignMiddleButton_Click);
+			// 
+			// alignBottomButton
+			// 
+			this->alignBottomButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->alignBottomButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"alignBottomButton.Image")));
+			this->alignBottomButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->alignBottomButton->Name = L"alignBottomButton";
+			this->alignBottomButton->Size = System::Drawing::Size(23, 22);
+			this->alignBottomButton->Text = L"по нижнему краю";
+			this->alignBottomButton->Click += gcnew System::EventHandler(this, &MyForm::alignBottomButton_Click);
+			// 
+			// toolStripSeparator8
+			// 
+			this->toolStripSeparator8->Name = L"toolStripSeparator8";
+			this->toolStripSeparator8->Size = System::Drawing::Size(6, 25);
+			// 
+			// textColorButton
+			// 
+			this->textColorButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->textColorButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"textColorButton.Image")));
+			this->textColorButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->textColorButton->Name = L"textColorButton";
+			this->textColorButton->Size = System::Drawing::Size(23, 22);
+			this->textColorButton->Text = L"цвет текста";
+			this->textColorButton->Click += gcnew System::EventHandler(this, &MyForm::textColorButton_Click);
+			// 
+			// backColorButton
+			// 
+			this->backColorButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->backColorButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"backColorButton.Image")));
+			this->backColorButton->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->backColorButton->Name = L"backColorButton";
+			this->backColorButton->Size = System::Drawing::Size(23, 22);
+			this->backColorButton->Text = L"цвет фона";
+			this->backColorButton->Click += gcnew System::EventHandler(this, &MyForm::backColorButton_Click);
+			// 
+			// fileToolStrip
+			// 
+			this->fileToolStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileDropDown });
+			this->fileToolStrip->Location = System::Drawing::Point(3, 3);
+			this->fileToolStrip->Name = L"fileToolStrip";
+			this->fileToolStrip->Size = System::Drawing::Size(991, 25);
+			this->fileToolStrip->TabIndex = 1;
+			this->fileToolStrip->Text = L"toolStrip3";
+			this->fileToolStrip->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::fileToolStrip_ItemClicked);
+			// 
+			// fileDropDown
+			// 
+			this->fileDropDown->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->fileDropDown->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+				this->newMenuItem,
+					this->openMenuItem, this->saveMenuItem, this->saveAsMenuItem
+			});
+			this->fileDropDown->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"fileDropDown.Image")));
+			this->fileDropDown->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->fileDropDown->Name = L"fileDropDown";
+			this->fileDropDown->Size = System::Drawing::Size(29, 22);
+			this->fileDropDown->Text = L"Файл";
+			// 
+			// newMenuItem
+			// 
+			this->newMenuItem->Name = L"newMenuItem";
+			this->newMenuItem->Size = System::Drawing::Size(153, 22);
+			this->newMenuItem->Text = L"Новый";
+			this->newMenuItem->Click += gcnew System::EventHandler(this, &MyForm::newMenuItem_Click);
+			// 
+			// openMenuItem
+			// 
+			this->openMenuItem->Name = L"openMenuItem";
+			this->openMenuItem->Size = System::Drawing::Size(153, 22);
+			this->openMenuItem->Text = L"Открыть";
+			this->openMenuItem->Click += gcnew System::EventHandler(this, &MyForm::openMenuItem_Click);
+			// 
+			// saveMenuItem
+			// 
+			this->saveMenuItem->Name = L"saveMenuItem";
+			this->saveMenuItem->Size = System::Drawing::Size(153, 22);
+			this->saveMenuItem->Text = L"Сохранить";
+			this->saveMenuItem->Click += gcnew System::EventHandler(this, &MyForm::saveMenuItem_Click);
+			// 
+			// saveAsMenuItem
+			// 
+			this->saveAsMenuItem->Name = L"saveAsMenuItem";
+			this->saveAsMenuItem->Size = System::Drawing::Size(153, 22);
+			this->saveAsMenuItem->Text = L"Сохранить как";
+			this->saveAsMenuItem->Click += gcnew System::EventHandler(this, &MyForm::saveAsMenuItem_Click);
+			// 
+			// excelGrid
+			// 
+			this->excelGrid->AllowUserToAddRows = false;
+			this->excelGrid->AllowUserToDeleteRows = false;
+			this->excelGrid->BackgroundColor = System::Drawing::SystemColors::Control;
+			this->excelGrid->ColumnHeadersHeight = 30;
+			this->excelGrid->GridColor = System::Drawing::SystemColors::ControlDarkDark;
+			this->excelGrid->Location = System::Drawing::Point(3, 56);
+			this->excelGrid->Name = L"excelGrid";
+			this->excelGrid->RowHeadersWidth = 40;
+			this->excelGrid->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::CellSelect;
+			this->excelGrid->Size = System::Drawing::Size(991, 630);
+			this->excelGrid->TabIndex = 0;
+			this->excelGrid->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::excelGrid_CellContentClick);
 			// 
 			// MyForm
 			// 
@@ -1343,6 +1652,13 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->paintCanvas))->EndInit();
 			this->toolStrip2->ResumeLayout(false);
 			this->toolStrip2->PerformLayout();
+			this->tabPageExcel->ResumeLayout(false);
+			this->tabPageExcel->PerformLayout();
+			this->formatToolStrip->ResumeLayout(false);
+			this->formatToolStrip->PerformLayout();
+			this->fileToolStrip->ResumeLayout(false);
+			this->fileToolStrip->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->excelGrid))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -1619,23 +1935,7 @@ private: System::Windows::Forms::ToolStripMenuItem^ ellipseMenuItem;
 			UpdateStatusBar(sender, e);
 		}
 	}
-	private: System::Void MyForm_Load_1(System::Object^ sender, System::EventArgs^ e) {
-		
-		if (paintCanvas->Image == nullptr) {
-			
-			System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(paintCanvas->Width, paintCanvas->Height);
 
-			
-			System::Drawing::Graphics^ g = System::Drawing::Graphics::FromImage(bmp);
-
-			g->Clear(paintCanvas->BackColor);
-
-
-			delete g;
-
-			paintCanvas->Image = bmp;
-		}
-	}
 private: System::Void alignLeftButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	richTextBox1->SelectionAlignment = HorizontalAlignment::Left;
 	toolStripStatusLabel1->Text = "Выравнивание: влево";
@@ -2263,6 +2563,23 @@ private: System::Void btnOpenHistory2_Click(System::Object^ sender, System::Even
 private: System::Void btnOpenHistory_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 
+private: System::Void MyForm_Load_1(System::Object^ sender, System::EventArgs^ e) {
+
+	if (paintCanvas->Image == nullptr) {
+
+		System::Drawing::Bitmap^ bmp = gcnew System::Drawing::Bitmap(paintCanvas->Width, paintCanvas->Height);
+
+
+		System::Drawing::Graphics^ g = System::Drawing::Graphics::FromImage(bmp);
+
+		g->Clear(paintCanvas->BackColor);
+
+
+		delete g;
+
+		paintCanvas->Image = bmp;
+	}
+}
 
 private: System::Void penButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	isLineMode = false;
@@ -2479,5 +2796,417 @@ private: System::Void ellipseMenuItem_Click(System::Object^ sender, System::Even
 	isErasing = false;
 	toolStripStatusLabel1->Text = "Фигура: Эллипс";
 }
+
+
+// ========== ИНИЦИАЛИЗАЦИЯ ТАБЛИЦЫ ==========
+void MyForm::InitExcelGrid() {
+	excelGrid->ColumnCount = 20;
+	excelGrid->RowCount = 20;
+	for (int i = 0; i < 20; i++) {
+		wchar_t letter = L'A' + i;
+		excelGrid->Columns[i]->HeaderText = letter.ToString();
+		excelGrid->Columns[i]->Width = 80;
+		excelGrid->Columns[i]->SortMode = DataGridViewColumnSortMode::NotSortable;
+	}
+	for (int i = 0; i < 20; i++) {
+		excelGrid->Rows[i]->HeaderCell->Value = (i + 1).ToString();
+		excelGrid->Rows[i]->Height = 22;
+	}
+	cellFormulas = gcnew Collections::Generic::Dictionary<String^, String^>();
+	currentExcelFilePath = nullptr;
+
+	//excelGrid->CellValueChanged += gcnew DataGridViewCellEventHandler(this, &MyForm::excelGrid_CellValueChanged);
+	//excelGrid->CurrentCellDirtyStateChanged += gcnew EventHandler(this, &MyForm::excelGrid_CurrentCellDirtyStateChanged);
+	excelGrid->CellEndEdit += gcnew DataGridViewCellEventHandler(this, &MyForm::excelGrid_CellEndEdit);
+
+	excelGrid->SelectionChanged += gcnew EventHandler(this, &MyForm::excelGrid_SelectionChanged);
+	excelGrid->ColumnWidthChanged += gcnew DataGridViewColumnEventHandler(this, &MyForm::excelGrid_ColumnWidthChanged);
+	excelGrid->RowHeightChanged += gcnew DataGridViewRowEventHandler(this, &MyForm::excelGrid_RowHeightChanged);
+
+	// Шрифты
+	fontComboBox->Items->Clear();
+	for each (System::Drawing::FontFamily ^ ff in System::Drawing::FontFamily::Families) {
+		fontComboBox->Items->Add(ff->Name);
+	}
+	if (fontComboBox->Items->Count > 0) fontComboBox->SelectedIndex = 0;
+	fontSizeComboBoxEX->Items->Clear();
+	array<String^>^ sizes = { "8","9","10","11","12","14","16","18","20","22","24","26","28","36","48","72" };
+	for each (String ^ s in sizes) fontSizeComboBoxEX->Items->Add(s);
+	fontSizeComboBoxEX->Text = "12";
+
+
+	boldButtonEX->Click += gcnew EventHandler(this, &MyForm::boldButtonEX_Click);
+	italicButtonEX->Click += gcnew EventHandler(this, &MyForm::italicButtonEX_Click);
+	underlineButtonEX->Click += gcnew EventHandler(this, &MyForm::underlineButtonEX_Click);
+	alignLeftButtonEX->Click += gcnew EventHandler(this, &MyForm::alignLeftButtonEX_Click);
+	alignCenterButtonEX->Click += gcnew EventHandler(this, &MyForm::alignCenterButtonEX_Click);
+	alignRightButtonEX->Click += gcnew EventHandler(this, &MyForm::alignRightButtonEX_Click);
+	alignTopButton->Click += gcnew EventHandler(this, &MyForm::alignTopButton_Click);
+	alignMiddleButton->Click += gcnew EventHandler(this, &MyForm::alignMiddleButton_Click);
+	alignBottomButton->Click += gcnew EventHandler(this, &MyForm::alignBottomButton_Click);
+	textColorButton->Click += gcnew EventHandler(this, &MyForm::textColorButton_Click);
+	backColorButton->Click += gcnew EventHandler(this, &MyForm::backColorButton_Click);
+	fontComboBox->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::fontComboBox_Click);
+	fontSizeComboBoxEX->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::fontSizeComboBoxEX_Click);
+
+}
+
+// ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ДЛЯ АДРЕСОВ ==========
+int MyForm::ColNameToIndex(String^ colName) {
+	int index = 0;
+	for each (wchar_t c in colName) {
+		if (c < L'A' || c > L'Z') return -1;
+		index = index * 26 + (c - L'A' + 1);
+	}
+	return index - 1;
+}
+
+String^ MyForm::ColIndexToName(int col) {
+	if (col < 0 || col >= 26) return L"?";
+	wchar_t letter = L'A' + (wchar_t)col;
+	return letter.ToString();
+}
+
+void MyForm::ParseCellAddress(String^ addr, int% row, int% col) {
+	int i = 0;
+	while (i < addr->Length && Char::IsLetter(addr[i])) i++;
+	String^ colPart = addr->Substring(0, i);
+	String^ rowPart = addr->Substring(i);
+	col = ColNameToIndex(colPart);
+	row = Convert::ToInt32(rowPart) - 1;
+}
+
+String^ MyForm::GetCellValueForFormula(int row, int col) {
+	if (row < 0 || row >= excelGrid->RowCount || col < 0 || col >= excelGrid->ColumnCount)
+		return L"0";
+	Object^ val = excelGrid->Rows[row]->Cells[col]->Value;
+	if (val == nullptr) return L"0";
+	String^ s = val->ToString();
+	if (s->Length > 0 && s[0] == L'=') return L"0";
+	double d;
+	if (Double::TryParse(s, d)) return s;
+	return L"0";
+}
+
+void MyForm::UpdateCellValue(int row, int col, String^ newValue) {
+	if (row >= 0 && row < excelGrid->RowCount && col >= 0 && col < excelGrid->ColumnCount)
+		excelGrid->Rows[row]->Cells[col]->Value = newValue;
+}
+
+// ========== ВЫЧИСЛЕНИЕ ФОРМУЛ ==========
+String^ MyForm::EvaluateFormula(String^ formula, int currentRow, int currentCol) {
+	if (!formula->StartsWith("=")) return formula;
+	String^ expr = formula->Substring(1);
+	StringBuilder^ sb = gcnew StringBuilder();
+	int len = expr->Length;
+	int i = 0;
+	while (i < len) {
+		if (Char::IsLetter(expr[i])) {
+			int start = i;
+			while (i < len && Char::IsLetter(expr[i])) i++;
+			String^ colPart = expr->Substring(start, i - start);
+			while (i < len && Char::IsDigit(expr[i])) i++;
+			String^ rowPart = expr->Substring(start + colPart->Length, i - (start + colPart->Length));
+			int row = Convert::ToInt32(rowPart) - 1;
+			int col = ColNameToIndex(colPart);
+			sb->Append(GetCellValueForFormula(row, col));
+		}
+		else {
+			sb->Append(expr[i]);
+			i++;
+		}
+	}
+	String^ substituted = sb->ToString();
+	try {
+		DataTable^ dt = gcnew DataTable();
+		Object^ res = dt->Compute(substituted, "");
+		return res->ToString();
+	}
+	catch (...) {
+		return L"#ОШИБКА";
+	}
+}
+
+// ========== СОХРАНЕНИЕ / ЗАГРУЗКА ==========
+void MyForm::SaveExcelToFile(String^ filename) {
+	XmlDocument^ doc = gcnew XmlDocument();
+	XmlElement^ root = doc->CreateElement("ExcelTable");
+	doc->AppendChild(root);
+	root->SetAttribute("Rows", "20");
+	root->SetAttribute("Columns", "20");
+	for (int c = 0; c < excelGrid->ColumnCount; c++) {
+		XmlElement^ colElem = doc->CreateElement("Column");
+		colElem->SetAttribute("Index", c.ToString());
+		colElem->SetAttribute("Width", excelGrid->Columns[c]->Width.ToString());
+		root->AppendChild(colElem);
+	}
+	for (int r = 0; r < excelGrid->RowCount; r++) {
+		XmlElement^ rowElem = doc->CreateElement("Row");
+		rowElem->SetAttribute("Index", r.ToString());
+		rowElem->SetAttribute("Height", excelGrid->Rows[r]->Height.ToString());
+		root->AppendChild(rowElem);
+	}
+	for (int r = 0; r < excelGrid->RowCount; r++) {
+		for (int c = 0; c < excelGrid->ColumnCount; c++) {
+			Object^ val = excelGrid->Rows[r]->Cells[c]->Value;
+			if (val != nullptr && val->ToString() != "") {
+				XmlElement^ cellElem = doc->CreateElement("Cell");
+				cellElem->SetAttribute("Row", r.ToString());
+				cellElem->SetAttribute("Col", c.ToString());
+				String^ address = ColIndexToName(c) + (r + 1).ToString();
+				cellElem->SetAttribute("Address", address);
+				cellElem->SetAttribute("DisplayValue", val->ToString());
+				if (cellFormulas->ContainsKey(address))
+					cellElem->SetAttribute("Formula", cellFormulas[address]);
+				root->AppendChild(cellElem);
+			}
+		}
+	}
+	doc->Save(filename);
+}
+
+void MyForm::LoadExcelFromFile(String^ filename) {
+	XmlDocument^ doc = gcnew XmlDocument();
+	doc->Load(filename);
+	XmlElement^ root = doc->DocumentElement;
+	for (int r = 0; r < excelGrid->RowCount; r++) {
+		for (int c = 0; c < excelGrid->ColumnCount; c++) {
+			excelGrid->Rows[r]->Cells[c]->Value = nullptr;
+		}
+	}
+	cellFormulas->Clear();
+	XmlNodeList^ cols = root->SelectNodes("Column");
+	for each (XmlNode ^ node in cols) {
+		int idx = Convert::ToInt32(node->Attributes["Index"]->Value);
+		int width = Convert::ToInt32(node->Attributes["Width"]->Value);
+		if (idx >= 0 && idx < excelGrid->ColumnCount)
+			excelGrid->Columns[idx]->Width = width;
+	}
+	XmlNodeList^ rows = root->SelectNodes("Row");
+	for each (XmlNode ^ node in rows) {
+		int idx = Convert::ToInt32(node->Attributes["Index"]->Value);
+		int height = Convert::ToInt32(node->Attributes["Height"]->Value);
+		if (idx >= 0 && idx < excelGrid->RowCount)
+			excelGrid->Rows[idx]->Height = height;
+	}
+	XmlNodeList^ cells = root->SelectNodes("Cell");
+	for each (XmlNode ^ node in cells) {
+		int r = Convert::ToInt32(node->Attributes["Row"]->Value);
+		int c = Convert::ToInt32(node->Attributes["Col"]->Value);
+		String^ address = node->Attributes["Address"]->Value;
+		String^ displayValue = node->Attributes["DisplayValue"]->Value;
+		String^ formula = (node->Attributes["Formula"] != nullptr) ? node->Attributes["Formula"]->Value : nullptr;
+		if (formula != nullptr && formula != "") {
+			cellFormulas[address] = formula;
+			String^ result = EvaluateFormula(formula, r, c);
+			excelGrid->Rows[r]->Cells[c]->Value = result;
+		}
+		else {
+			excelGrid->Rows[r]->Cells[c]->Value = displayValue;
+		}
+	}
+}
+
+// ========== ОБРАБОТЧИКИ СОБЫТИЙ ТАБЛИЦЫ ==========
+void MyForm::excelGrid_CellValueChanged(Object^ sender, DataGridViewCellEventArgs^ e) {
+	if (e->RowIndex < 0 || e->ColumnIndex < 0) return;
+	String^ cellValue = excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+	String^ address = ColIndexToName(e->ColumnIndex) + (e->RowIndex + 1).ToString();
+	if (cellValue->Length > 0 && cellValue[0] == L'=') {
+		String^ result = EvaluateFormula(cellValue, e->RowIndex, e->ColumnIndex);
+		if (cellFormulas->ContainsKey(address))
+			cellFormulas[address] = cellValue;
+		else
+			cellFormulas->Add(address, cellValue);
+		excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = result;
+	}
+	else {
+		if (cellFormulas->ContainsKey(address))
+			cellFormulas->Remove(address);
+	}
+}
+
+void MyForm::excelGrid_CurrentCellDirtyStateChanged(Object^ sender, EventArgs^ e) {
+	if (excelGrid->IsCurrentCellDirty)
+		excelGrid->CommitEdit(DataGridViewDataErrorContexts::Commit);
+}
+
+void MyForm::excelGrid_SelectionChanged(Object^ sender, EventArgs^ e) {}
+void MyForm::excelGrid_ColumnWidthChanged(Object^ sender, DataGridViewColumnEventArgs^ e) {}
+void MyForm::excelGrid_RowHeightChanged(Object^ sender, DataGridViewRowEventArgs^ e) {}
+
+// ========== ФАЙЛОВЫЕ ОПЕРАЦИИ ==========
+void MyForm::newMenuItem_Click(Object^ sender, EventArgs^ e) {
+	for (int i = 0; i < excelGrid->RowCount; i++) {
+		for (int j = 0; j < excelGrid->ColumnCount; j++) {
+			excelGrid->Rows[i]->Cells[j]->Value = nullptr;
+		}
+	}
+	cellFormulas->Clear();
+	for (int c = 0; c < excelGrid->ColumnCount; c++) excelGrid->Columns[c]->Width = 80;
+	for (int r = 0; r < excelGrid->RowCount; r++) excelGrid->Rows[r]->Height = 22;
+	currentExcelFilePath = nullptr;
+}
+
+void MyForm::openMenuItem_Click(Object^ sender, EventArgs^ e) {
+	OpenFileDialog^ openDlg = gcnew OpenFileDialog();
+	openDlg->Filter = L"Excel Table files (*.xltab)|*.xltab|All files (*.*)|*.*";
+	if (openDlg->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		LoadExcelFromFile(openDlg->FileName);
+		currentExcelFilePath = openDlg->FileName;
+	}
+}
+
+void MyForm::saveMenuItem_Click(Object^ sender, EventArgs^ e) {
+	if (currentExcelFilePath == nullptr)
+		saveAsMenuItem_Click(sender, e);
+	else
+		SaveExcelToFile(currentExcelFilePath);
+}
+
+void MyForm::saveAsMenuItem_Click(Object^ sender, EventArgs^ e) {
+	SaveFileDialog^ saveDlg = gcnew SaveFileDialog();
+	saveDlg->Filter = L"Excel Table files (*.xltab)|*.xltab|All files (*.*)|*.*";
+	saveDlg->DefaultExt = L"xltab";
+	if (saveDlg->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		SaveExcelToFile(saveDlg->FileName);
+		currentExcelFilePath = saveDlg->FileName;
+	}
+}
+
+// ========== ФОРМАТИРОВАНИЕ ЯЧЕЕК ==========
+void MyForm::boldButtonEX_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	FontStyle newStyle = currentFont->Bold ? (currentFont->Style & ~FontStyle::Bold) : (currentFont->Style | FontStyle::Bold);
+	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+}
+
+void MyForm::italicButtonEX_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	FontStyle newStyle = currentFont->Italic ? (currentFont->Style & ~FontStyle::Italic) : (currentFont->Style | FontStyle::Italic);
+	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+}
+
+void MyForm::underlineButtonEX_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	FontStyle newStyle = currentFont->Underline ? (currentFont->Style & ~FontStyle::Underline) : (currentFont->Style | FontStyle::Underline);
+	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+}
+
+void MyForm::alignLeftButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell) excelGrid->CurrentCell->Style->Alignment = DataGridViewContentAlignment::MiddleLeft;
+}
+void MyForm::alignCenterButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell) excelGrid->CurrentCell->Style->Alignment = DataGridViewContentAlignment::MiddleCenter;
+}
+void MyForm::alignRightButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell) excelGrid->CurrentCell->Style->Alignment = DataGridViewContentAlignment::MiddleRight;
+}
+void MyForm::alignTopButton_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	DataGridViewContentAlignment currAlign = cell->Style->Alignment;
+	DataGridViewContentAlignment newAlign;
+	if ((currAlign & DataGridViewContentAlignment::TopLeft) == DataGridViewContentAlignment::TopLeft)
+		newAlign = DataGridViewContentAlignment::TopLeft;
+	else if ((currAlign & DataGridViewContentAlignment::TopRight) == DataGridViewContentAlignment::TopRight)
+		newAlign = DataGridViewContentAlignment::TopRight;
+	else
+		newAlign = DataGridViewContentAlignment::TopCenter;
+	cell->Style->Alignment = newAlign;
+}
+void MyForm::alignMiddleButton_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	DataGridViewContentAlignment currAlign = cell->Style->Alignment;
+	DataGridViewContentAlignment newAlign;
+	if ((currAlign & DataGridViewContentAlignment::MiddleLeft) == DataGridViewContentAlignment::MiddleLeft)
+		newAlign = DataGridViewContentAlignment::MiddleLeft;
+	else if ((currAlign & DataGridViewContentAlignment::MiddleRight) == DataGridViewContentAlignment::MiddleRight)
+		newAlign = DataGridViewContentAlignment::MiddleRight;
+	else
+		newAlign = DataGridViewContentAlignment::MiddleCenter;
+	cell->Style->Alignment = newAlign;
+}
+void MyForm::alignBottomButton_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	DataGridViewContentAlignment currAlign = cell->Style->Alignment;
+	DataGridViewContentAlignment newAlign;
+	if ((currAlign & DataGridViewContentAlignment::BottomLeft) == DataGridViewContentAlignment::BottomLeft)
+		newAlign = DataGridViewContentAlignment::BottomLeft;
+	else if ((currAlign & DataGridViewContentAlignment::BottomRight) == DataGridViewContentAlignment::BottomRight)
+		newAlign = DataGridViewContentAlignment::BottomRight;
+	else
+		newAlign = DataGridViewContentAlignment::BottomCenter;
+	cell->Style->Alignment = newAlign;
+}
+void MyForm::textColorButton_Click(Object^ sender, EventArgs^ e) {
+	ColorDialog^ dlg = gcnew ColorDialog();
+	if (dlg->ShowDialog() == System::Windows::Forms::DialogResult::OK && excelGrid->CurrentCell)
+		excelGrid->CurrentCell->Style->ForeColor = dlg->Color;
+}
+void MyForm::backColorButton_Click(Object^ sender, EventArgs^ e) {
+	ColorDialog^ dlg = gcnew ColorDialog();
+	if (dlg->ShowDialog() == System::Windows::Forms::DialogResult::OK && excelGrid->CurrentCell)
+		excelGrid->CurrentCell->Style->BackColor = dlg->Color;
+}
+void MyForm::fontComboBox_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	String^ familyName = fontComboBox->Text;
+	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	cell->Style->Font = gcnew System::Drawing::Font(familyName, currentFont->Size, currentFont->Style);
+}
+void MyForm::fontSizeComboBoxEX_Click(Object^ sender, EventArgs^ e) {
+	DataGridViewCell^ cell = excelGrid->CurrentCell;
+	if (cell == nullptr) return;
+	float newSize = float::Parse(fontSizeComboBoxEX->Text);
+	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, newSize, currentFont->Style);
+}
+
+void MyForm::excelGrid_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+
+}
+void MyForm::fileToolStrip_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+
+}
+void MyForm::formatToolStrip_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
+
+}
+
+void MyForm::excelGrid_CellEndEdit(Object^ sender, DataGridViewCellEventArgs^ e) {
+	if (e->RowIndex < 0 || e->ColumnIndex < 0) return;
+
+	String^ cellValue = excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+	String^ address = ColIndexToName(e->ColumnIndex) + (e->RowIndex + 1).ToString();
+
+	if (cellValue->Length > 0 && cellValue[0] == L'=') {
+		// Это формула
+		String^ result = EvaluateFormula(cellValue, e->RowIndex, e->ColumnIndex);
+
+		// Сохраняем формулу
+		if (cellFormulas->ContainsKey(address))
+			cellFormulas[address] = cellValue;
+		else
+			cellFormulas->Add(address, cellValue);
+
+		// Показываем результат
+		excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = result;
+	}
+	else {
+		// Обычное значение
+		if (cellFormulas->ContainsKey(address))
+			cellFormulas->Remove(address);
+	}
+}
+
 };
 }
