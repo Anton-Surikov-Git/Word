@@ -1178,21 +1178,21 @@ private: System::Windows::Forms::ToolStripButton^ backColorButton;
 			// btnSaveHistory2
 			// 
 			this->btnSaveHistory2->Name = L"btnSaveHistory2";
-			this->btnSaveHistory2->Size = System::Drawing::Size(132, 22);
+			this->btnSaveHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnSaveHistory2->Text = L"Сохранить";
 			this->btnSaveHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnSaveHistory2_Click);
 			// 
 			// btnClearHistory2
 			// 
 			this->btnClearHistory2->Name = L"btnClearHistory2";
-			this->btnClearHistory2->Size = System::Drawing::Size(132, 22);
+			this->btnClearHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnClearHistory2->Text = L"Очистить";
 			this->btnClearHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnClearHistory2_Click);
 			// 
 			// btnOpenHistory2
 			// 
 			this->btnOpenHistory2->Name = L"btnOpenHistory2";
-			this->btnOpenHistory2->Size = System::Drawing::Size(132, 22);
+			this->btnOpenHistory2->Size = System::Drawing::Size(133, 22);
 			this->btnOpenHistory2->Text = L"Открыть";
 			this->btnOpenHistory2->Click += gcnew System::EventHandler(this, &MyForm::btnOpenHistory2_Click);
 			// 
@@ -1388,7 +1388,7 @@ private: System::Windows::Forms::ToolStripButton^ backColorButton;
 			this->tabPageExcel->Padding = System::Windows::Forms::Padding(3);
 			this->tabPageExcel->Size = System::Drawing::Size(997, 689);
 			this->tabPageExcel->TabIndex = 5;
-			this->tabPageExcel->Text = L"EX";
+			this->tabPageExcel->Text = L"EX (Не рабочий)";
 			this->tabPageExcel->UseVisualStyleBackColor = true;
 			// 
 			// formatToolStrip
@@ -1580,28 +1580,28 @@ private: System::Windows::Forms::ToolStripButton^ backColorButton;
 			// newMenuItem
 			// 
 			this->newMenuItem->Name = L"newMenuItem";
-			this->newMenuItem->Size = System::Drawing::Size(153, 22);
+			this->newMenuItem->Size = System::Drawing::Size(154, 22);
 			this->newMenuItem->Text = L"Новый";
 			this->newMenuItem->Click += gcnew System::EventHandler(this, &MyForm::newMenuItem_Click);
 			// 
 			// openMenuItem
 			// 
 			this->openMenuItem->Name = L"openMenuItem";
-			this->openMenuItem->Size = System::Drawing::Size(153, 22);
+			this->openMenuItem->Size = System::Drawing::Size(154, 22);
 			this->openMenuItem->Text = L"Открыть";
 			this->openMenuItem->Click += gcnew System::EventHandler(this, &MyForm::openMenuItem_Click);
 			// 
 			// saveMenuItem
 			// 
 			this->saveMenuItem->Name = L"saveMenuItem";
-			this->saveMenuItem->Size = System::Drawing::Size(153, 22);
+			this->saveMenuItem->Size = System::Drawing::Size(154, 22);
 			this->saveMenuItem->Text = L"Сохранить";
 			this->saveMenuItem->Click += gcnew System::EventHandler(this, &MyForm::saveMenuItem_Click);
 			// 
 			// saveAsMenuItem
 			// 
 			this->saveAsMenuItem->Name = L"saveAsMenuItem";
-			this->saveAsMenuItem->Size = System::Drawing::Size(153, 22);
+			this->saveAsMenuItem->Size = System::Drawing::Size(154, 22);
 			this->saveAsMenuItem->Text = L"Сохранить как";
 			this->saveAsMenuItem->Click += gcnew System::EventHandler(this, &MyForm::saveAsMenuItem_Click);
 			// 
@@ -3076,27 +3076,43 @@ void MyForm::saveAsMenuItem_Click(Object^ sender, EventArgs^ e) {
 
 // ========== ФОРМАТИРОВАНИЕ ЯЧЕЕК ==========
 void MyForm::boldButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell == nullptr) return;
+
+	excelGrid->EndEdit();
+
 	DataGridViewCell^ cell = excelGrid->CurrentCell;
-	if (cell == nullptr) return;
-	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	System::Drawing::Font^ currentFont = cell->Style->Font;
+	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Bold ? (currentFont->Style & ~FontStyle::Bold) : (currentFont->Style | FontStyle::Bold);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+
+	excelGrid->Refresh(); 
 }
 
 void MyForm::italicButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell == nullptr) return;
+
+	excelGrid->EndEdit();
+
 	DataGridViewCell^ cell = excelGrid->CurrentCell;
-	if (cell == nullptr) return;
-	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	System::Drawing::Font^ currentFont = cell->Style->Font;
+	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Italic ? (currentFont->Style & ~FontStyle::Italic) : (currentFont->Style | FontStyle::Italic);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+	excelGrid->Refresh();
 }
 
 void MyForm::underlineButtonEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell == nullptr) return;
+
+	excelGrid->EndEdit();
+
 	DataGridViewCell^ cell = excelGrid->CurrentCell;
-	if (cell == nullptr) return;
-	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	System::Drawing::Font^ currentFont = cell->Style->Font;
+	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Underline ? (currentFont->Style & ~FontStyle::Underline) : (currentFont->Style | FontStyle::Underline);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+	excelGrid->Refresh();
 }
 
 void MyForm::alignLeftButtonEX_Click(Object^ sender, EventArgs^ e) {
@@ -3158,18 +3174,24 @@ void MyForm::backColorButton_Click(Object^ sender, EventArgs^ e) {
 		excelGrid->CurrentCell->Style->BackColor = dlg->Color;
 }
 void MyForm::fontComboBox_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell == nullptr) return;
 	DataGridViewCell^ cell = excelGrid->CurrentCell;
-	if (cell == nullptr) return;
 	String^ familyName = fontComboBox->Text;
-	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	System::Drawing::Font^ currentFont = cell->Style->Font;
+	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	cell->Style->Font = gcnew System::Drawing::Font(familyName, currentFont->Size, currentFont->Style);
+	excelGrid->Refresh();
 }
+
 void MyForm::fontSizeComboBoxEX_Click(Object^ sender, EventArgs^ e) {
+	if (excelGrid->CurrentCell == nullptr) return;
 	DataGridViewCell^ cell = excelGrid->CurrentCell;
-	if (cell == nullptr) return;
-	float newSize = float::Parse(fontSizeComboBoxEX->Text);
-	System::Drawing::Font^ currentFont = (cell->Style->Font != nullptr) ? cell->Style->Font : excelGrid->Font;
+	float newSize;
+	if (!float::TryParse(fontSizeComboBoxEX->Text, newSize)) return;
+	System::Drawing::Font^ currentFont = cell->Style->Font;
+	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, newSize, currentFont->Style);
+	excelGrid->Refresh();
 }
 
 void MyForm::excelGrid_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
@@ -3189,20 +3211,20 @@ void MyForm::excelGrid_CellEndEdit(Object^ sender, DataGridViewCellEventArgs^ e)
 	String^ address = ColIndexToName(e->ColumnIndex) + (e->RowIndex + 1).ToString();
 
 	if (cellValue->Length > 0 && cellValue[0] == L'=') {
-		// Это формула
+		
 		String^ result = EvaluateFormula(cellValue, e->RowIndex, e->ColumnIndex);
 
-		// Сохраняем формулу
+		
 		if (cellFormulas->ContainsKey(address))
 			cellFormulas[address] = cellValue;
 		else
 			cellFormulas->Add(address, cellValue);
 
-		// Показываем результат
+		
 		excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = result;
 	}
 	else {
-		// Обычное значение
+		
 		if (cellFormulas->ContainsKey(address))
 			cellFormulas->Remove(address);
 	}
