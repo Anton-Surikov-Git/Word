@@ -2798,7 +2798,7 @@ private: System::Void ellipseMenuItem_Click(System::Object^ sender, System::Even
 }
 
 
-// ========== ИНИЦИАЛИЗАЦИЯ ТАБЛИЦЫ ==========
+// ИНИЦИАЛИЗАЦИЯ ТАБЛИЦЫ 
 void MyForm::InitExcelGrid() {
 	excelGrid->ColumnCount = 20;
 	excelGrid->RowCount = 20;
@@ -2815,10 +2815,7 @@ void MyForm::InitExcelGrid() {
 	cellFormulas = gcnew Collections::Generic::Dictionary<String^, String^>();
 	currentExcelFilePath = nullptr;
 
-	//excelGrid->CellValueChanged += gcnew DataGridViewCellEventHandler(this, &MyForm::excelGrid_CellValueChanged);
-	//excelGrid->CurrentCellDirtyStateChanged += gcnew EventHandler(this, &MyForm::excelGrid_CurrentCellDirtyStateChanged);
 	excelGrid->CellEndEdit += gcnew DataGridViewCellEventHandler(this, &MyForm::excelGrid_CellEndEdit);
-
 	excelGrid->SelectionChanged += gcnew EventHandler(this, &MyForm::excelGrid_SelectionChanged);
 	excelGrid->ColumnWidthChanged += gcnew DataGridViewColumnEventHandler(this, &MyForm::excelGrid_ColumnWidthChanged);
 	excelGrid->RowHeightChanged += gcnew DataGridViewRowEventHandler(this, &MyForm::excelGrid_RowHeightChanged);
@@ -2851,7 +2848,7 @@ void MyForm::InitExcelGrid() {
 
 }
 
-// ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ДЛЯ АДРЕСОВ ==========
+// ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ДЛЯ АДРЕСОВ 
 int MyForm::ColNameToIndex(String^ colName) {
 	int index = 0;
 	for each (wchar_t c in colName) {
@@ -2893,7 +2890,7 @@ void MyForm::UpdateCellValue(int row, int col, String^ newValue) {
 		excelGrid->Rows[row]->Cells[col]->Value = newValue;
 }
 
-// ========== ВЫЧИСЛЕНИЕ ФОРМУЛ ==========
+// ВЫЧИСЛЕНИЕ ФОРМУЛ 
 String^ MyForm::EvaluateFormula(String^ formula, int currentRow, int currentCol) {
 	if (!formula->StartsWith("=")) return formula;
 	String^ expr = formula->Substring(1);
@@ -2927,7 +2924,7 @@ String^ MyForm::EvaluateFormula(String^ formula, int currentRow, int currentCol)
 	}
 }
 
-// ========== СОХРАНЕНИЕ / ЗАГРУЗКА ==========
+// СОХРАНЕНИЕ / ЗАГРУЗКА 
 void MyForm::SaveExcelToFile(String^ filename) {
 	XmlDocument^ doc = gcnew XmlDocument();
 	XmlElement^ root = doc->CreateElement("ExcelTable");
@@ -3007,7 +3004,7 @@ void MyForm::LoadExcelFromFile(String^ filename) {
 	}
 }
 
-// ========== ОБРАБОТЧИКИ СОБЫТИЙ ТАБЛИЦЫ ==========
+// ОБРАБОТЧИКИ СОБЫТИЙ ТАБЛИЦЫ 
 void MyForm::excelGrid_CellValueChanged(Object^ sender, DataGridViewCellEventArgs^ e) {
 	if (e->RowIndex < 0 || e->ColumnIndex < 0) return;
 	String^ cellValue = excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
@@ -3035,7 +3032,7 @@ void MyForm::excelGrid_SelectionChanged(Object^ sender, EventArgs^ e) {}
 void MyForm::excelGrid_ColumnWidthChanged(Object^ sender, DataGridViewColumnEventArgs^ e) {}
 void MyForm::excelGrid_RowHeightChanged(Object^ sender, DataGridViewRowEventArgs^ e) {}
 
-// ========== ФАЙЛОВЫЕ ОПЕРАЦИИ ==========
+// ФАЙЛОВЫЕ ОПЕРАЦИИ 
 void MyForm::newMenuItem_Click(Object^ sender, EventArgs^ e) {
 	for (int i = 0; i < excelGrid->RowCount; i++) {
 		for (int j = 0; j < excelGrid->ColumnCount; j++) {
@@ -3074,7 +3071,7 @@ void MyForm::saveAsMenuItem_Click(Object^ sender, EventArgs^ e) {
 	}
 }
 
-// ========== ФОРМАТИРОВАНИЕ ЯЧЕЕК ==========
+// ФОРМАТИРОВАНИЕ ЯЧЕЕК 
 void MyForm::boldButtonEX_Click(Object^ sender, EventArgs^ e) {
 	if (excelGrid->CurrentCell == nullptr) return;
 
@@ -3085,8 +3082,10 @@ void MyForm::boldButtonEX_Click(Object^ sender, EventArgs^ e) {
 	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Bold ? (currentFont->Style & ~FontStyle::Bold) : (currentFont->Style | FontStyle::Bold);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
-
-	excelGrid->Refresh(); 
+	
+	excelGrid->Invalidate(cell->ColumnIndex);
+	excelGrid->Refresh();
+	
 }
 
 void MyForm::italicButtonEX_Click(Object^ sender, EventArgs^ e) {
@@ -3099,7 +3098,9 @@ void MyForm::italicButtonEX_Click(Object^ sender, EventArgs^ e) {
 	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Italic ? (currentFont->Style & ~FontStyle::Italic) : (currentFont->Style | FontStyle::Italic);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+
 	excelGrid->Refresh();
+	excelGrid->Invalidate(cell->ColumnIndex);
 }
 
 void MyForm::underlineButtonEX_Click(Object^ sender, EventArgs^ e) {
@@ -3112,7 +3113,9 @@ void MyForm::underlineButtonEX_Click(Object^ sender, EventArgs^ e) {
 	if (currentFont == nullptr) currentFont = excelGrid->Font;
 	FontStyle newStyle = currentFont->Underline ? (currentFont->Style & ~FontStyle::Underline) : (currentFont->Style | FontStyle::Underline);
 	cell->Style->Font = gcnew System::Drawing::Font(currentFont->FontFamily, currentFont->Size, newStyle);
+
 	excelGrid->Refresh();
+	excelGrid->Invalidate(cell->ColumnIndex);
 }
 
 void MyForm::alignLeftButtonEX_Click(Object^ sender, EventArgs^ e) {
@@ -3207,20 +3210,21 @@ void MyForm::formatToolStrip_ItemClicked(System::Object^ sender, System::Windows
 void MyForm::excelGrid_CellEndEdit(Object^ sender, DataGridViewCellEventArgs^ e) {
 	if (e->RowIndex < 0 || e->ColumnIndex < 0) return;
 
-	String^ cellValue = excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString();
+	DataGridViewCell^ cell = excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex];
+	Color savedForeColor = cell->Style->ForeColor;
+	Color savedBackColor = cell->Style->BackColor;
+	System::Drawing::Font^ savedFont = cell->Style->Font;
+	DataGridViewContentAlignment savedAlignment = cell->Style->Alignment;
+
+	String^ cellValue = cell->Value->ToString();
 	String^ address = ColIndexToName(e->ColumnIndex) + (e->RowIndex + 1).ToString();
 
 	if (cellValue->Length > 0 && cellValue[0] == L'=') {
-		
 		String^ result = EvaluateFormula(cellValue, e->RowIndex, e->ColumnIndex);
-
-		
 		if (cellFormulas->ContainsKey(address))
 			cellFormulas[address] = cellValue;
 		else
 			cellFormulas->Add(address, cellValue);
-
-		
 		excelGrid->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = result;
 	}
 	else {
@@ -3228,6 +3232,14 @@ void MyForm::excelGrid_CellEndEdit(Object^ sender, DataGridViewCellEventArgs^ e)
 		if (cellFormulas->ContainsKey(address))
 			cellFormulas->Remove(address);
 	}
+
+	cell->Style->ForeColor = savedForeColor;
+	cell->Style->BackColor = savedBackColor;
+	cell->Style->Font = savedFont;
+	cell->Style->Alignment = savedAlignment;
+
+	excelGrid->InvalidateCell(e->RowIndex, e->ColumnIndex);
+
 }
 
 };
